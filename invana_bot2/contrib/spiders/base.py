@@ -142,11 +142,6 @@ class WebCrawlerBase(CrawlSpider):
 
             traversal_links = []
             is_this_request_from_same_traversal = self.is_this_request_from_same_traversal(response, traversal)
-            # print("is_this_request_from_same_traversal", is_this_request_from_same_traversal)
-            # print("current_request_traversal_page_count", current_request_traversal_page_count)
-            # print("traversal_max_pages", traversal_max_pages)
-            # print(" current_request_traversal_page_count < traversal_max_pages",
-            # current_request_traversal_page_count < traversal_max_pages)
             shall_traverse = False
 
             if current_request_traversal_id is None:
@@ -173,7 +168,6 @@ class WebCrawlerBase(CrawlSpider):
                 spiders.
                 """
                 shall_traverse = True
-            # print("shall_traverse: {}".format(traversal_id), shall_traverse)
             if shall_traverse:
                 traversal_links = self.run_traversal(response=response, traversal=traversal)
                 traversal_data[traversal_id] = {"traversal_urls": traversal_links}
@@ -189,11 +183,6 @@ class WebCrawlerBase(CrawlSpider):
                     max_pages is 5 
                     """
                     if current_request_traversal_page_count < max_pages:
-                        # print("=======current_request_traversal_page_count", current_request_traversal_page_count)
-                        # print("link", link)
-                        # print("-----------------------------------")
-
-                        # print("===>>>>meta", meta)
                         to_traverse_links_list.append(
                             {
                                 "link": link,
