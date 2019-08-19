@@ -13,10 +13,11 @@ class WebCrawlerBase(CrawlSpider):
 
     """
 
-    spider_id = None
-    spider_config = None
+    # spider_id = None  # id of the current spider
+    spider_config = None  # json config of the current crawler
     spider_data_storage = None
     manifest = {}
+    current_request_traversal_id = None  # this will contain the config of traversal that led to this spider.
 
     def post_parse(self, response=None):
         pass
@@ -32,9 +33,10 @@ class WebCrawlerBase(CrawlSpider):
                 errback=self.parse_error,
                 dont_filter=True,
                 meta={
-                    "current_request_traversal_page_count": 0,
+                    "current_request_traversal_count": 0,
                     "spider_config": self.spider_config,
-                    "manifest": self.manifest
+                    "manifest": self.manifest,
+                    "current_request_traversal_id": 'xyz'
                 }
             )
 
@@ -113,6 +115,10 @@ class WebCrawlerBase(CrawlSpider):
     def get_traversal_max_pages(self, traversal=None):
         return traversal.get('max_pages', 1)
 
+    def get_current_traversal_requests_count(self, traversal_id=None):
+        return self.crawler.stats.get_value(
+            'invana-stats/traversals/{}/requests_count'.format(traversal_id)) or 0
+
     def run_traversals(self, spider_config=None, response=None):
         """
         if spider_traversal_id is None, it means this response originated from the
@@ -121,7 +127,6 @@ class WebCrawlerBase(CrawlSpider):
         If it is Not None, the request/response is raised some traversal strategy.
         """
         current_request_traversal_id = response.meta.get('current_request_traversal_id', None)
-        current_request_traversal_page_count = response.meta.get('current_request_traversal_page_count', 0)
 
         """
         Note on current_request_spider_id:
@@ -138,6 +143,10 @@ class WebCrawlerBase(CrawlSpider):
 
             traversal['allow_domains'] = next_spider.get("allowed_domains", [])
             traversal_id = traversal['traversal_id']
+
+            current_request_traversal_count = self.get_current_traversal_requests_count(traversal_id)
+            print("current_request_traversal_count", current_request_traversal_count)
+
             traversal_max_pages = self.get_traversal_max_pages(traversal=traversal)
 
             traversal_links = []
@@ -150,7 +159,7 @@ class WebCrawlerBase(CrawlSpider):
                 """
                 shall_traverse = True
 
-            elif is_this_request_from_same_traversal and current_request_traversal_page_count < traversal_max_pages:
+            elif is_this_request_from_same_traversal and current_request_traversal_count < traversal_max_pages:
                 """
                 This block will be valid for the traversals from same spider_id, ie., pagination of a spider 
                 """
@@ -162,12 +171,13 @@ class WebCrawlerBase(CrawlSpider):
                 """
                 shall_traverse = True
 
-            elif is_this_request_from_same_traversal is False and current_request_traversal_page_count < traversal_max_pages:
+            elif is_this_request_from_same_traversal is False and current_request_traversal_count < traversal_max_pages:
                 """
                 This for the spider_a traversing to spider_b, this is not pagination, but trsversing between 
                 spiders.
                 """
                 shall_traverse = True
+
             if shall_traverse:
                 traversal_links = self.run_traversal(response=response, traversal=traversal)
                 traversal_data[traversal_id] = {"traversal_urls": traversal_links}
@@ -176,13 +186,15 @@ class WebCrawlerBase(CrawlSpider):
                 This is where the further traversal for this traversal_id  is decided 
                 """
                 max_pages = self.get_traversal_max_pages(traversal=traversal)
+
                 for link in traversal_links:
 
                     """
                     we are already incrementing, the last number, so using <= might make it 6 pages when 
                     max_pages is 5 
                     """
-                    if current_request_traversal_page_count < max_pages:
+                    # print ("=============traversal_id", traversal_id)
+                    if current_request_traversal_count < max_pages:
                         to_traverse_links_list.append(
                             {
                                 "link": link,
@@ -190,12 +202,12 @@ class WebCrawlerBase(CrawlSpider):
                                     "spider_config": next_spider,
                                     "manifest": response.meta.get("manifest"),
                                     "current_request_traversal_id": traversal_id,
-                                    "current_request_traversal_page_count": current_request_traversal_page_count,
+                                    "current_request_traversal_count": current_request_traversal_count,
 
                                 }}
                         )
 
-                    current_request_traversal_page_count += 1
+                    current_request_traversal_count += 1
 
             print("Extracted {} traversal_links for traversal_id:'{}' in url:{}".format(len(traversal_links),
                                                                                         traversal_id, response.url))

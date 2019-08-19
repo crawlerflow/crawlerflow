@@ -16,7 +16,7 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
     def run_extractor(response=None, extractor=None):
         extractor_type = extractor.get("extractor_type")
         extractor_id = extractor.get("extractor_id")
-        print("Running extractor '{}' on url:{}".format(extractor_id, response.url))
+        print("Running extractor:'{}' on url:{}".format(extractor_id, response.url))
         driver_klass_module = import_module(f'invana_bot2.extractors')
         driver_klass = getattr(driver_klass_module, extractor_type)
         if extractor_type is None:

@@ -7,6 +7,6 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     },
     'DOWNLOADER_MIDDLEWARES': {
         "invana_bot2.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderRequestStats": 121,
-        "invana_bot2.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 999,
+        "invana_bot2.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 800,
     }
 }

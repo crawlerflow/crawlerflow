@@ -14,12 +14,13 @@ spiders:
   - traversal_id: default_traversal
     selector_type: css
     selector_value: "a"
-    max_pages: 10
+    max_pages: 5
     next_spider_id: default_spider
 settings:
   allowed_domains:
   - "github.com"
   download_delay: 0
+  debug: true
 datasets:
 - storage_id: default
   storage_type: mongodb
