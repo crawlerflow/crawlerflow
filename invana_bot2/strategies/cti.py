@@ -5,6 +5,7 @@ from invana_bot2.contrib.spiders.web import InvanaBotSingleWebCrawler
 from invana_bot2.contrib.spiders.xml import GenericXMLFeedSpider
 from invana_bot2.contrib.spiders.api import GenericAPISpider
 from scrapy import signals
+import yaml
 
 
 class JobRunner(object):
@@ -30,11 +31,14 @@ class JobRunner(object):
         spider_settings = job['spider_settings']
         spider_kwargs = job['spider_kwargs']
 
+        spider = Crawler(spider_cls, Settings(spider_settings))
+
         def engine_stopped_callback():
             print("Alright! I'm done with job.")
             reactor.stop()
+            with open('log.txt', 'w') as yml:
+                yaml.dump(spider.stats.get_stats(), yml, allow_unicode=True)
 
-        spider = Crawler(spider_cls, Settings(spider_settings))
         spider.signals.connect(engine_stopped_callback, signals.engine_stopped)
 
         self.runner.crawl(spider, **spider_kwargs)

@@ -36,7 +36,8 @@ class WebCrawlerBase(CrawlSpider):
                     "current_request_traversal_count": 0,
                     "spider_config": self.spider_config,
                     "manifest": self.manifest,
-                    "current_request_traversal_id": 'xyz'
+                    "current_request_traversal_id": "init",
+                    "current_traversal_max_count": 1
                 }
             )
 
@@ -145,7 +146,6 @@ class WebCrawlerBase(CrawlSpider):
             traversal_id = traversal['traversal_id']
 
             current_request_traversal_count = self.get_current_traversal_requests_count(traversal_id)
-            print("current_request_traversal_count", current_request_traversal_count)
 
             traversal_max_pages = self.get_traversal_max_pages(traversal=traversal)
 
@@ -203,6 +203,7 @@ class WebCrawlerBase(CrawlSpider):
                                     "manifest": response.meta.get("manifest"),
                                     "current_request_traversal_id": traversal_id,
                                     "current_request_traversal_count": current_request_traversal_count,
+                                    "current_traversal_max_count": max_pages,
 
                                 }}
                         )

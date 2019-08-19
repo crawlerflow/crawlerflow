@@ -1,0 +1,25 @@
+downloader/exception_count: 4
+downloader/exception_type_count/builtins.TypeError: 4
+downloader/request_bytes: 209
+downloader/request_count: 1
+downloader/request_method_count/GET: 1
+downloader/response_bytes: 23507
+downloader/response_count: 1
+downloader/response_status_count/200: 1
+dupefilter/filtered: 1
+finish_reason: finished
+finish_time: 2019-08-19 23:43:56.174152
+httpcache/hit: 1
+invana-stats/default_spider/responses_count: 1
+invana-stats/spiders/default_spider/requests_count: 1
+invana-stats/traversals/init/requests_count: 2
+item_scraped_count: 1
+memusage/max: 57499648
+memusage/startup: 57499648
+request_depth_max: 1
+response_received_count: 1
+scheduler/dequeued: 5
+scheduler/dequeued/memory: 5
+scheduler/enqueued: 5
+scheduler/enqueued/memory: 5
+start_time: 2019-08-19 23:43:55.794753

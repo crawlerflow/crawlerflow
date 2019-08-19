@@ -1,4 +1,3 @@
-from scrapy.exceptions import CloseSpider, IgnoreRequest
 
 
 class IndividualSpiderRequestStats(object):
