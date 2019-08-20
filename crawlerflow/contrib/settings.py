@@ -8,6 +8,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     'DOWNLOADER_MIDDLEWARES': {
         "crawlerflow.contrib.middlewares.downloaders.controllers.IgnoreTraversalRequestsController": 111,
         "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderRequestsBasedStopController": 112,
+        "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderResponsesBasedStopController": 113,
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderRequestStats": 121,
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 800,
     }
