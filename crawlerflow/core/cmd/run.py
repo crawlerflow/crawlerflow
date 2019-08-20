@@ -1,83 +1,37 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-
-import os
 import argparse
-from crawlerflow.jobs.cti import InvanaBotJobGenerator
-from crawlerflow.settings.default import DEFAULT_SETTINGS
-from crawlerflow.manifests.cti import CTIManifestManager
-from crawlerflow.spiders.web import InvanaBotSingleWebCrawler
-from crawlerflow.spiders.xml import GenericXMLFeedSpider
-from crawlerflow.spiders.api import GenericAPISpider
+import os
+from crawlerflow.strategies.cti import CrawlerFlowJobRunner
+from crawlerflow.core.jobs.default import JobGenerator
+from crawlerflow.contrib.settings import DEFAULT_SETTINGS_FOR_SCRAPY
 
 
-# from invana_bot.jobs.single import SingleCrawlJobGenerator
-# from invana_bot.manifests.single import SingleCrawlerManifestManager
-
-
-def invana_bot_run():
+def run():
     spider_choices = (
         "web",
-        "web-single",
         "xml",
         "api"
     )
-    parser = argparse.ArgumentParser(description='InvanaBot - A web spider framework that can'
-                                                 ' transform websites into datasets with Crawl, '
-                                                 'Transform and Index workflow; just with the configuration.')
+    parser = argparse.ArgumentParser(
+        description='CrawlerFlow - Highly scalable Crawler Orchestration Products and Services for Humans with'
+                    'High-Velocity data needs.')
 
-    parser.add_argument('--path', type=str, default='./', help='The path of the cti_manifest.yml')
+    parser.add_argument('--path', type=str, default=os.getcwd(), help='The path of the manifest.yml')
     parser.add_argument('--type', type=str,
                         default='web',
-                        required=True,
                         help='options are : {}'.format(",".join(spider_choices)),
                         choices=spider_choices)
 
     args = parser.parse_args()
     path = os.path.abspath(args.path)
-    spider_type = args.type
+    cf_type = args.type
+    print("path", path)
 
-    if spider_type == "web":
-        spider_cls = InvanaBotSingleWebCrawler
-    elif spider_type == "xml":
-        spider_cls = GenericXMLFeedSpider
-    elif spider_type == "api":
-        spider_cls = GenericAPISpider
+    job_generator = JobGenerator(path=path,
+                                 type=cf_type,
+                                 settings=DEFAULT_SETTINGS_FOR_SCRAPY)
+    job = job_generator.create_spider_job()
 
-    else:
-        raise Exception("There is no crawling strategy designed for spider type: '{}'".format(spider_type))
-
-    manifest_manager = CTIManifestManager(
-        manifest_path=path
-    )
-
-    manifest, errors = manifest_manager.get_manifest()
-    # print("cti_manifest", cti_manifest)
-
-    first_spider = manifest.get("spiders", [])[0]
-
-    ignore_spider_keys = ["spider_id", "allowed_domains", "extractors", "traversals"]
-    extra_arguments = {}
-    for k, v in first_spider.items():
-        if k not in ignore_spider_keys:
-            extra_arguments[k] = v
-    if len(errors) == 0:
-        spider_job_generator = InvanaBotJobGenerator(
-            settings=DEFAULT_SETTINGS,
-        )
-        context = manifest.get("context")
-        job = spider_job_generator.create_job(
-            manifest=manifest,
-            context=context,
-            spider_cls=spider_cls,
-            extra_arguments=extra_arguments
-
-        )
-        spider_job_generator.start_job(job=job)
-    else:
-        print("==============================================================")
-        print("ERROR : ETI Job Failing with the errors :: {}".format(
-            manifest_manager.manifest_path,
-            errors
-        ))
-        print("==============================================================")
+    runner = CrawlerFlowJobRunner()
+    runner.start_job(job=job)

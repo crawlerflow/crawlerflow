@@ -5,6 +5,7 @@ init_spider:
     - https://github.blog
 spiders:
 - spider_id: default_spider
+  spider_type: web
   allowed_domains:
     - "github.com"
   extractors:

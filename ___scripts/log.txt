@@ -1,27 +1,29 @@
-downloader/exception_count: 4
-downloader/exception_type_count/builtins.TypeError: 4
-downloader/request_bytes: 1098
+downloader/exception_count: 6
+downloader/exception_type_count/builtins.TypeError: 6
+downloader/request_bytes: 1123
 downloader/request_count: 6
 downloader/request_method_count/GET: 3
-downloader/response_bytes: 35833
+downloader/response_bytes: 102240
 downloader/response_count: 3
-downloader/response_status_count/200: 2
-downloader/response_status_count/302: 1
-dupefilter/filtered: 1
+downloader/response_status_count/200: 3
+dupefilter/filtered: 4
 finish_reason: finished
-finish_time: 2019-08-20 09:12:09.843734
-httpcache/hit: 3
+finish_time: 2019-08-20 09:41:19.795941
+httpcache/firsthand: 1
+httpcache/hit: 2
+httpcache/miss: 1
+httpcache/store: 1
 invana-stats/default_spider/responses_count: 3
 invana-stats/spiders/default_spider/requests_count: 3
-invana-stats/traversals/default_traversal/requests_count: 4
-invana-stats/traversals/init/requests_count: 2
-item_scraped_count: 2
-memusage/max: 57536512
-memusage/startup: 57536512
+invana-stats/traversals/default_traversal/requests_count: 2
+invana-stats/traversals/init/requests_count: 4
+item_scraped_count: 3
+memusage/max: 57815040
+memusage/startup: 57815040
 request_depth_max: 2
-response_received_count: 2
-scheduler/dequeued: 7
-scheduler/dequeued/memory: 7
-scheduler/enqueued: 7
-scheduler/enqueued/memory: 7
-start_time: 2019-08-20 09:12:09.463594
+response_received_count: 3
+scheduler/dequeued: 9
+scheduler/dequeued/memory: 9
+scheduler/enqueued: 9
+scheduler/enqueued/memory: 9
+start_time: 2019-08-20 09:41:19.175959

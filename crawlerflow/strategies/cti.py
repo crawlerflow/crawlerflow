@@ -8,14 +8,14 @@ from scrapy import signals
 import yaml
 
 
-class JobRunner(object):
+class CrawlerFlowJobRunner(object):
     """
 
 
     """
     runner = CrawlerRunner()
 
-    def start_job(self, job=None, callback_fn=None):
+    def start_job(self, job=None,  callback_fn=None):
         print(job)
         spider_type = job['spider_type']
 

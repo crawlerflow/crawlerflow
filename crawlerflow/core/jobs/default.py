@@ -3,7 +3,6 @@ from datetime import datetime
 from crawlerflow.utils.other import generate_random_id
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule
-from scrapy.crawler import Crawler, CrawlerRunner
 
 
 class JobGenerator(object):
@@ -13,7 +12,7 @@ class JobGenerator(object):
 
     """
 
-    def __init__(self, path="./", job_id=None, settings=None, **kwargs):
+    def __init__(self, path="./", job_id=None, type=None, settings=None, **kwargs):
         """
 
 
@@ -24,6 +23,7 @@ class JobGenerator(object):
         :param kwargs:
         """
         self.path = path
+        self.type = type
         self.job_id = generate_random_id() if job_id is None else job_id
         self.settings = settings or {}
         self.context = None
@@ -42,12 +42,12 @@ class JobGenerator(object):
         :return:
         """
         manifest_manager = CTIManifestManager(
-            manifest_path=self.path
+            cf_path=self.path
         )
-        manifest, errors = manifest_manager.get_manifest()
-        return manifest, errors
+        manifest, start_urls, errors = manifest_manager.get_manifest()
+        return manifest, start_urls, errors
 
-    def generate_spider_kwargs(self, spider_config=None, manifest=None):
+    def generate_spider_kwargs(self, spider_config=None, start_urls=None, manifest=None):
         """
 
         :param spider_config:
@@ -58,7 +58,6 @@ class JobGenerator(object):
         rules = [
             Rule(extractor, follow=True)  # TODO - add regex types of needed.
         ]
-        start_urls = manifest.get("init_spider", {}).get("start_urls", [])
         context = manifest.get("context")
         if context is None:
             context = {}
@@ -80,14 +79,14 @@ class JobGenerator(object):
 
         :return:
         """
-        manifest, errors = self.import_files()
+        manifest, start_urls, errors = self.import_files()
         spider_config = manifest.get("spiders", [])[0]
-
         spider_type = self.get_spider_type(spider_data=spider_config)
         settings_from_manifest = manifest.get("settings", {})
-
         for k, v in settings_from_manifest.items():
             self.settings[k.upper()] = v
-        spider_kwargs = self.generate_spider_kwargs(spider_config=spider_config, manifest=manifest)
-        return {"spider_type": spider_type, "spider_kwargs": spider_kwargs, "spider_settings": self.settings}
-
+        spider_kwargs = self.generate_spider_kwargs(spider_config=spider_config, start_urls=start_urls,
+                                                    manifest=manifest)
+        return {"spider_type": spider_type,
+                "spider_kwargs": spider_kwargs,
+                "spider_settings": self.settings}
