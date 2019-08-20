@@ -20,5 +20,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.extensions.timeseries.CrawlerFlowTimeSeriesStats': 10,
         'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
         'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12,
-    }
+    },
+    'FEED_FORMAT':  'json',
+    'FEED_URI': "data.json"
 }
