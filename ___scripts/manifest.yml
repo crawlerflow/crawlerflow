@@ -15,11 +15,11 @@ spiders:
   - traversal_id: default_traversal
     selector_type: css
     selector_value: "a"
-    max_pages: 5
+    max_pages: 500
     next_spider_id: default_spider
   stop_criteria:
-    max_requests: 2
-    max_respones: 10
+    max_requests: 100
+    max_respones: 100
   login_settings:
     url: http://localhost/accounts/login
     username: xyz
