@@ -13,11 +13,12 @@ class IndividualSpiderRequestStats(object):
 
         spider_id = spider.spider_config.get("spider_id")
         spider.crawler.stats.inc_value('invana-stats/spiders/{}/requests_count'.format(spider_id), spider=spider)
+        spider.crawler.stats.inc_value('downloader/request_count', spider=spider)
 
 
 class IndividualSpiderResponseStats(object):
     """
-    To calculate the spider stats
+    This will calculate the individual spider stats
     """
 
     def process_response(self, request, response, spider):
