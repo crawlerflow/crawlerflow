@@ -6,8 +6,6 @@ init_spider:
 spiders:
 - spider_id: default_spider
   spider_type: web
-  allowed_domains:
-    - "github.com"
   extractors:
   - extractor_type: MetaTagExtractor
     extractor_id: meta_tags
@@ -26,11 +24,10 @@ spiders:
     password: password
     form_identifier:
       selector: ".login-form"
-settings:
-  allowed_domains:
-  - "github.com"
-  download_delay: 0
-  debug: true
+  spider_settings:
+    allowed_domains:
+    - "github.com"
+    download_delay: 0
 datasets:
 - storage_id: default
   storage_type: mongodb
