@@ -87,6 +87,8 @@ class JobGenerator(object):
             self.settings[k.upper()] = v
         spider_kwargs = self.generate_spider_kwargs(spider_config=spider_config, start_urls=start_urls,
                                                     manifest=manifest)
-        return {"spider_type": spider_type,
-                "spider_kwargs": spider_kwargs,
-                "spider_settings": self.settings}
+        return {
+            "spider_type": spider_type,
+            "spider_kwargs": spider_kwargs,
+            "spider_settings": self.settings
+        }

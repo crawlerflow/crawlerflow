@@ -26,12 +26,10 @@ def run():
     args = parser.parse_args()
     path = os.path.abspath(args.path)
     cf_type = args.type
-    print("path", path)
-
     job_generator = JobGenerator(path=path,
                                  type=cf_type,
                                  settings=DEFAULT_SETTINGS_FOR_SCRAPY)
     job = job_generator.create_spider_job()
 
-    runner = CrawlerFlowJobRunner()
-    runner.start_job(job=job)
+    runner = CrawlerFlowJobRunner( )
+    runner.start_job(job=job, path=path)

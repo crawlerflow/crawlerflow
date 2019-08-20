@@ -14,7 +14,7 @@ class CTIManifestManager(object):
     manifest = None
 
     def __init__(self, cf_path="."):
-        print("Setting ETI path as: {}".format(cf_path))
+        print("Setting CrawlerFlow path as: {}".format(cf_path))
         self.cf_path = cf_path or "."
         self.ib_functions = None
         self.manifest = None

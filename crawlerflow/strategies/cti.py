@@ -6,6 +6,7 @@ from crawlerflow.contrib.spiders.xml import GenericXMLFeedSpider
 from crawlerflow.contrib.spiders.api import GenericAPISpider
 from scrapy import signals
 import yaml
+import os
 
 
 class CrawlerFlowJobRunner(object):
@@ -15,8 +16,7 @@ class CrawlerFlowJobRunner(object):
     """
     runner = CrawlerRunner()
 
-    def start_job(self, job=None,  callback_fn=None):
-        print(job)
+    def start_job(self, job=None, path=None, callback_fn=None):
         spider_type = job['spider_type']
 
         if spider_type == "web":
@@ -36,7 +36,11 @@ class CrawlerFlowJobRunner(object):
         def engine_stopped_callback():
             print("Alright! I'm done with job.")
             reactor.stop()
-            with open('log.txt', 'w') as yml:
+
+            log_director = '{}/.logs'.format(path)
+            if not os.path.exists(log_director):
+                os.makedirs(log_director)
+            with open('{}/log.txt'.format(log_director), 'w') as yml:
                 yaml.dump(spider.stats.get_stats(), yml, allow_unicode=True)
 
         spider.signals.connect(engine_stopped_callback, signals.engine_stopped)
