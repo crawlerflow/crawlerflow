@@ -118,7 +118,7 @@ class WebCrawlerBase(CrawlSpider):
 
     def get_current_traversal_requests_count(self, traversal_id=None):
         return self.crawler.stats.get_value(
-            'invana-stats/traversals/{}/requests_count'.format(traversal_id)) or 0
+            'crawlerflow-stats/traversals/{}/requests_count'.format(traversal_id)) or 0
 
     def run_traversals(self, spider_config=None, response=None):
         """

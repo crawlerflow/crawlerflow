@@ -16,7 +16,7 @@ class IgnoreTraversalRequestsController(object):
         current_traversal_max_count = request.meta.get("current_traversal_max_count")
         if current_request_traversal_id != "init":
             current_request_traversal_count = spider.crawler.stats.get_value(
-                'invana-stats/traversals/{}/requests_count'.format(current_request_traversal_id), spider=spider)
+                'crawlerflow-stats/traversals/{}/requests_count'.format(current_request_traversal_id), spider=spider)
             if current_request_traversal_count and current_request_traversal_count > current_traversal_max_count:
                 raise IgnoreRequest(
                     reason="max traversals for traversal_id: {} achieved".format(current_request_traversal_id))
@@ -32,7 +32,7 @@ class SpiderRequestsBasedStopController(object):
         spider_id = spider.spider_config.get("spider_id")
 
         current_spider_requests_count = spider.crawler.stats.get_value(
-            'invana-stats/spiders/{}/requests_count'.format(spider_id),
+            'crawlerflow-stats/spiders/{}/requests_count'.format(spider_id),
             spider=spider)
 
         current_spider_max_requests_count = spider.spider_config.get("stop_criteria", {}).get("max_requests")
@@ -54,7 +54,7 @@ class SpiderResponsesBasedStopController(object):
         spider_id = spider.spider_config.get("spider_id")
 
         current_spider_responses_count = spider.crawler.stats.get_value(
-            'invana-stats/spiders/{}/responses_count'.format(spider_id),
+            'crawlerflow-stats/spiders/{}/responses_count'.format(spider_id),
             spider=spider)
 
         current_spider_max_responses_count = spider.spider_config.get("stop_criteria", {}).get("max_responses")

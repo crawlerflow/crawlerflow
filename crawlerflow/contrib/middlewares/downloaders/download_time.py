@@ -4,7 +4,7 @@ from scrapy.http import Response
 
 class CrawlerFlowDownloadTime(object):
     """
-    This will let us to determine the time took for a request to be finished.
+    This will let us determine the time took for a request to be finished.
     """
 
     def process_request(self, request, spider):

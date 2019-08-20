@@ -33,7 +33,6 @@ class CrawlerFlowRequestsStats(object):
         log_director = '{}/.logs'.format(path)
         if not os.path.exists(log_director):
             os.makedirs(log_director)
-        print ("response.headers", response.headers)
         response_stats = {
             "url": response.url,
             "status": response.status,
