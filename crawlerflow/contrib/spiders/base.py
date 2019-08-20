@@ -108,7 +108,6 @@ class WebCrawlerBase(CrawlSpider):
             kwargs['restrict_xpaths'] = (traversal.get("selector_value"),)
 
         kwargs['allow_domains'] = traversal.get("allow_domains", [])
-        kwargs['deny_domains'] = traversal.get("deny_domains", [])
         return GenericLinkExtractor(**kwargs).extract_links(response=response)
 
     def get_traversal_max_pages(self, traversal=None):
@@ -141,7 +140,6 @@ class WebCrawlerBase(CrawlSpider):
             next_spider = get_spider_from_list(spider_id=next_spider_id, spiders=spiders)
 
             traversal['allow_domains'] = next_spider.get("spider_settings", {}).get("allowed_domains", [])
-            traversal['deny_domains'] = next_spider.get("spider_settings", {}).get("denied_domains", [])
             traversal_id = traversal['traversal_id']
             current_request_traversal_count = self.get_current_traversal_requests_count(traversal_id)
             traversal_max_pages = self.get_traversal_max_pages(traversal=traversal)

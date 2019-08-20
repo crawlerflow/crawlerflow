@@ -13,7 +13,6 @@ class GenericLinkExtractor(object):
                  restrict_css=(),
                  restrict_regex=(),
                  allow_domains=(),
-                 deny_domains=(),
                  link_extractor_cls=LinkExtractor, **kwargs):
         """
 
@@ -22,13 +21,11 @@ class GenericLinkExtractor(object):
         :param restrict_regex: list of regex patterns
         :param link_extractor_cls: defaults to scrapy link extractor
         :param allow_domains: defaults to the allowed domains of spider
-        :param deny_domains: this domain urls will be ignored from going to traversal.
         """
         self.restrict_xpaths = restrict_xpaths
         self.restrict_css = restrict_css
         self.restrict_regex = restrict_regex
         self.allow_domains = allow_domains
-        self.deny_domains = deny_domains
         self.link_extractor_cls = link_extractor_cls
 
     def extract_links(self, response=None):
@@ -39,10 +36,7 @@ class GenericLinkExtractor(object):
                                             ).extract_links(response=response)
         all_links_strings = [link.url for link in all_links]
 
-        # remove regex
-
         filtered_links = []
-
         for domain in self.allow_domains:
             regex_domain = r"/{}".format(domain).replace(".", "\.")
             pattern = re.compile(regex_domain)
