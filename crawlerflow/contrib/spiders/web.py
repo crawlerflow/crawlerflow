@@ -1,6 +1,6 @@
-from invana_bot2.contrib.spiders.base import WebCrawlerBase
+from crawlerflow.contrib.spiders.base import WebCrawlerBase
 from importlib import import_module
-from invana_bot2.utils.url import get_domain
+from crawlerflow.utils.url import get_domain
 
 
 class InvanaBotSingleWebCrawler(WebCrawlerBase):
@@ -17,7 +17,7 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
         extractor_type = extractor.get("extractor_type")
         extractor_id = extractor.get("extractor_id")
         print("Running extractor:'{}' on url:{}".format(extractor_id, response.url))
-        driver_klass_module = import_module(f'invana_bot2.extractors')
+        driver_klass_module = import_module(f'crawlerflow.extractors')
         driver_klass = getattr(driver_klass_module, extractor_type)
         if extractor_type is None:
             return {extractor_id: None}

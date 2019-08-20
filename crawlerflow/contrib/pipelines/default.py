@@ -2,7 +2,7 @@ from datetime import datetime
 from scrapy.exceptions import DropItem
 from elasticsearch import Elasticsearch
 from pymongo import MongoClient
-from invana_bot2.utils.other import generate_random_id
+from crawlerflow.utils.other import generate_random_id
 from slugify import slugify
 
 

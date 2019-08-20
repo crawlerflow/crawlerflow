@@ -1,6 +1,6 @@
 from ..manifests.cti import CTIManifestManager
 from datetime import datetime
-from invana_bot2.utils.other import generate_random_id
+from crawlerflow.utils.other import generate_random_id
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import Rule
 from scrapy.crawler import Crawler, CrawlerRunner

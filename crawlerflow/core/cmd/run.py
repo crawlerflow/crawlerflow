@@ -3,12 +3,12 @@ from __future__ import print_function
 
 import os
 import argparse
-from invana_bot2.jobs.cti import InvanaBotJobGenerator
-from invana_bot2.settings.default import DEFAULT_SETTINGS
-from invana_bot2.manifests.cti import CTIManifestManager
-from invana_bot2.spiders.web import InvanaBotSingleWebCrawler
-from invana_bot2.spiders.xml import GenericXMLFeedSpider
-from invana_bot2.spiders.api import GenericAPISpider
+from crawlerflow.jobs.cti import InvanaBotJobGenerator
+from crawlerflow.settings.default import DEFAULT_SETTINGS
+from crawlerflow.manifests.cti import CTIManifestManager
+from crawlerflow.spiders.web import InvanaBotSingleWebCrawler
+from crawlerflow.spiders.xml import GenericXMLFeedSpider
+from crawlerflow.spiders.api import GenericAPISpider
 
 
 # from invana_bot.jobs.single import SingleCrawlJobGenerator

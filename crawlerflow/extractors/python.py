@@ -1,4 +1,4 @@
-from invana_bot2.extractors.base import ExtractorBase
+from crawlerflow.extractors.base import ExtractorBase
 
 
 class PythonBasedExtractor(ExtractorBase):

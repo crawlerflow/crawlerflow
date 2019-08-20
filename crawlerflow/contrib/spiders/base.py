@@ -1,8 +1,8 @@
 from scrapy.spiders import CrawlSpider
 from scrapy.http import Request
-from invana_bot2.utils.spiders import get_spider_from_list
+from crawlerflow.utils.spiders import get_spider_from_list
 import os
-from invana_bot2.core.traversals.generic import GenericLinkExtractor
+from crawlerflow.core.traversals.generic import GenericLinkExtractor
 import scrapy
 
 

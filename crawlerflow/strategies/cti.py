@@ -1,9 +1,9 @@
 from twisted.internet import reactor
 from scrapy.crawler import Crawler, CrawlerRunner
 from scrapy.settings import Settings
-from invana_bot2.contrib.spiders.web import InvanaBotSingleWebCrawler
-from invana_bot2.contrib.spiders.xml import GenericXMLFeedSpider
-from invana_bot2.contrib.spiders.api import GenericAPISpider
+from crawlerflow.contrib.spiders.web import InvanaBotSingleWebCrawler
+from crawlerflow.contrib.spiders.xml import GenericXMLFeedSpider
+from crawlerflow.contrib.spiders.api import GenericAPISpider
 from scrapy import signals
 import yaml
 

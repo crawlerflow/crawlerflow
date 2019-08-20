@@ -21,7 +21,7 @@ class SelectorExtractor(object):
 
 
 def transform_data(data=None, data_type=None):
-    fields = importlib.import_module("invana_bot2.fields")
+    fields = importlib.import_module("crawlerflow.fields")
     Klass = getattr(fields, data_type)
     data = Klass(data=data).transform()
     return data

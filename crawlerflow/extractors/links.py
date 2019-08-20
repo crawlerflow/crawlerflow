@@ -1,6 +1,6 @@
-from invana_bot2.extractors.base import ExtractorBase
-from invana_bot2.utils.selectors import get_selector_element
-from invana_bot2.utils.url import get_urn, get_domain
+from crawlerflow.extractors.base import ExtractorBase
+from crawlerflow.utils.selectors import get_selector_element
+from crawlerflow.utils.url import get_urn, get_domain
 
 
 class AllLinksExtractor(ExtractorBase):

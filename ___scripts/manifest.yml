@@ -1,8 +1,8 @@
 cti_id: github
 init_spider:
-  start_urls:
-  - "https://github.com"
   spider_id: default_spider
+  start_urls:
+    - https://github.blog
 spiders:
 - spider_id: default_spider
   allowed_domains:
@@ -16,6 +16,15 @@ spiders:
     selector_value: "a"
     max_pages: 5
     next_spider_id: default_spider
+  stop_criteria:
+    max_requests: 2
+    max_respones: 10
+  login_settings:
+    url: http://localhost/accounts/login
+    username: xyz
+    password: password
+    form_identifier:
+      selector: ".login-form"
 settings:
   allowed_domains:
   - "github.com"

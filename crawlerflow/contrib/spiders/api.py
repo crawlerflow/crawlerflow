@@ -1,7 +1,7 @@
 from .base import WebCrawlerBase
-from invana_bot2.utils.url import get_domain, get_absolute_url
+from crawlerflow.utils.url import get_domain, get_absolute_url
 from scrapy.utils.spider import iterate_spider_output
-from invana_bot2.utils.spiders import get_spider_from_list
+from crawlerflow.utils.spiders import get_spider_from_list
 import scrapy
 import json
 

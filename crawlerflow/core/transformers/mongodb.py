@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from pymongo import MongoClient
-from invana_bot2.core.transformers.executors import Executor
+from crawlerflow.core.transformers.executors import Executor
 from datetime import datetime
 
 
