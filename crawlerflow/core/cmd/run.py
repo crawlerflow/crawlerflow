@@ -2,7 +2,7 @@
 from __future__ import print_function
 import argparse
 import os
-from crawlerflow.strategies.cti import CrawlerFlowJobRunner
+from crawlerflow.strategies.default import CrawlerFlowJobRunner
 from crawlerflow.core.jobs.default import JobGenerator
 from crawlerflow.contrib.settings import DEFAULT_SETTINGS_FOR_SCRAPY
 
