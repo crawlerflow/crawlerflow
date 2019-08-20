@@ -14,6 +14,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 800,
     },
     'EXTENSIONS': {
-        'crawlerflow.contrib.extensions.logging.CrawlerFlowLogStats': 10,
+        'crawlerflow.contrib.extensions.timeseries.CrawlerFlowTimeSeriesStats': 10,
+        'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
     }
 }

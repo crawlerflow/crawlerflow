@@ -3,7 +3,8 @@ from datetime import datetime
 import os
 import yaml
 
-class CrawlerFlowLogStats(LogStats):
+
+class CrawlerFlowTimeSeriesStats(LogStats):
 
     def log(self, spider):
         item_scraped_count = self.stats.get_value('item_scraped_count', 0)
@@ -24,6 +25,3 @@ class CrawlerFlowLogStats(LogStats):
         with open(timeseries_log_file, 'a') as fh:
             line = ",".join([str(v) for k, v in datum.items()])
             fh.write("{}\n".format(line))
-
-        with open('{}/log.txt'.format(log_director), 'w') as yml:
-            yaml.dump(self.stats.get_stats(), yml, allow_unicode=True)
