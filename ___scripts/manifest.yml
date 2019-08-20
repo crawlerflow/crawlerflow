@@ -26,7 +26,7 @@ spiders:
       selector: ".login-form"
   spider_settings:
     allowed_domains:
-    - "github.com"
+    - github.com
     download_delay: 0
 datasets:
 - storage_id: default

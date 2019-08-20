@@ -35,8 +35,6 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
         return {extractor_id: None}
 
     def parse(self, response=None):
-        # self.logger.info("======Parsing the url: {}".format(response.url))
-        # print("======Parsing the url: {}".format(response.url))
         spider_config = self.get_spider_config(response=response)
         """
         Use this when multiple databases concept is implemented
@@ -62,7 +60,6 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
         data['context']['spider_id'] = spider_config['spider_id']
         traversal_data, to_traverse_links_list = self.run_traversals(spider_config=spider_config, response=response)
         # This will save the data
-
         data['extracted_data'] = all_extracted_data
         data['traversal_data'] = traversal_data
 
