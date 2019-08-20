@@ -63,6 +63,7 @@ class CrawlerFlowJobRunner(object):
             line = ",".join([str(v) for k, v in datum.items()])
             f.write("{}\n".format(line))
             f.close()
+            open('{}/all-requests.txt'.format(log_director), 'w').close()
 
         spider.signals.connect(engine_started_callback, signals.engine_started)
         spider.signals.connect(engine_stopped_callback, signals.engine_stopped)
