@@ -29,13 +29,10 @@ configurations.
 5. Write Python Extractors for advanced extraction strategy
 
 
-
-
-
 ## Install
 
 ```bash
-pip install git+https://github.com/invanalabs/invana-bot#egg=invana_bot
+pip install git+https://github.com/crawlerflow/crawlerflow#egg=crawlerflow
 # This project is under constant development and might brake any previous implementation.
 ```
 
@@ -46,15 +43,7 @@ pip install git+https://github.com/invanalabs/invana-bot#egg=invana_bot
 To run a single website spider, to extract information from one website only.
 
 ```bash
-python3 bin/bot.py --path ./examples/run-single-spider/ --type=single
-```
-
-To run a complex crawling strategy where crawling and data extraction happenings through multiple 
-websites with traversal definitions.
-
-
-```bash
-python3 bin/bot.py --path ./examples/cti-flow-runner/ --type=cti
+crawlerflow --path examples/ --type=web
 ```
 
 
@@ -66,6 +55,6 @@ Refer examples in the `examples/` folder or check [doc/index.md](docs/index.md) 
 ## Support
 
 Few features like IP rotation, headless browsing, data backups, scheduling and monitoring are 
-available in our [InvanaBot Cloud](https://invanalabs.ai/invana-bot.html) version.
+available in our [InvanaBot Cloud](https://crawlerflow.com) version.
 
-For any futher queries or dedicated support, please feel free to [contact us](http://invanalabs.ai/contact-us.html)
+For any futher queries or dedicated support, please feel free to [contact us](http://crawlerflow.com)
