@@ -1,11 +1,7 @@
-# Invana Bot
+# CrawlerFlow
 
-A web spider framework that can transform websites into datasets using Crawl, 
-Transform and Index strategy. The best part is you don't need to code, you just need 
- to define the extraction and traversal configurations in yaml. 
-
-
-InvanaBot uses [MongoDB](https://www.mongodb.com/) as default database for caching and storage.
+Web Crawlers orchestration Framework that lets you create datasets from multiple web sources with yaml 
+configurations.
 
 
 
@@ -20,18 +16,19 @@ InvanaBot uses [MongoDB](https://www.mongodb.com/) as default database for cachi
 
 ## Features
 
-1. spiders in the form of json configuration.
+1. Write spiders in the YAML configuration.
 
-2. Define traversals from one parser to another.
+2. Define multiple extractors per spider.
+ 
+3. Traverse between multiple websites.
 
 3. Use standard extractors to scrape data like Tables, Paragraphs, Meta data of the page.
 
 4. Define custom extractors to scrapy the data in the format you want in yaml config.
 
-5. MongoDB as default Cache and Storage Database.
+5. Write Python Extractors for advanced extraction strategy
 
-7. Transform and Index - You can add your data transformation logic, that can format 
-the crawled data into another format and index into use specified storage. 
+
 
 
 

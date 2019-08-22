@@ -11,5 +11,5 @@ dist/
 .DS_Store
 site/
 examples/scripts/*
-___scripts/
+exampo/
 ___scripts/.logs/*
