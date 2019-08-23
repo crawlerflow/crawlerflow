@@ -107,7 +107,10 @@ class WebCrawlerBase(CrawlSpider):
         elif selector_type == "xpath":
             kwargs['restrict_xpaths'] = (traversal.get("selector_value"),)
 
-        kwargs['allow_domains'] = traversal.get("allow_domains", [])
+        allow_domains = traversal.get("allow_domains", [])
+        kwargs['allow_domains'] = allow_domains
+        if "*" in allow_domains:
+            kwargs['allow_domains'] = []
         return GenericLinkExtractor(**kwargs).extract_links(response=response)
 
     def get_traversal_max_pages(self, traversal=None):
