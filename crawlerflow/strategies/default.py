@@ -49,7 +49,11 @@ class CrawlerFlowJobRunner(object):
 
             if not os.path.exists(log_director):
                 os.makedirs(log_director)
-
+            # remove data.json
+            try:
+                os.remove("{}/data.json".format(path))
+            except Exception as e:
+                pass
             # remove any log files
             for file in sorted(os.listdir(log_director)):
                 os.remove("{}/{}".format(log_director, file))
