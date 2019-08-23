@@ -12,6 +12,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderRequestsBasedStopController": 112,
         "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderResponsesBasedStopController": 113,
         "crawlerflow.contrib.middlewares.downloaders.spider_delay.IndividualSpiderDownloadDelay": 114,
+        "crawlerflow.contrib.middlewares.downloaders.spider_agent.CrawlerFlowSpiderAgent": 115,
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderRequestStats": 121,
         "crawlerflow.contrib.middlewares.downloaders.status.CrawlerFlowStatusStats": 800,
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 801,
