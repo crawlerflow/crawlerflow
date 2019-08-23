@@ -37,6 +37,8 @@ class GenericLinkExtractor(object):
         all_links_strings = [link.url for link in all_links]
 
         filtered_links = []
+        if "*" in self.allow_domains:
+            return all_links_strings
         for domain in self.allow_domains:
             regex_domain = r"/{}".format(domain).replace(".", "\.")
             pattern = re.compile(regex_domain)
