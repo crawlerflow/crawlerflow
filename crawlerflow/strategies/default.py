@@ -6,6 +6,7 @@ from crawlerflow.contrib.spiders.xml import GenericXMLFeedSpider
 from crawlerflow.contrib.spiders.api import GenericAPISpider
 from scrapy import signals
 import yaml
+from crawlerflow.utils.callback import run_callback
 import os
 from datetime import datetime
 
@@ -43,6 +44,10 @@ class CrawlerFlowJobRunner(object):
                 os.makedirs(log_director)
             with open('{}/log.txt'.format(log_director), 'w') as yml:
                 yaml.dump(spider.stats.get_stats(), yml, allow_unicode=True)
+
+            callback = job.get("spider_kwargs", {}).get("manifest", {}).get("callback", {})
+            run_callback(callback)
+            print("callback", callback)
 
         def engine_started_callback():
             log_director = '{}/.logs'.format(path)

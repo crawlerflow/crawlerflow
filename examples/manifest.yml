@@ -16,8 +16,8 @@ spiders:
     max_pages: 500
     next_spider_id: default_spider
   stop_criteria:
-    max_requests: 100
-    max_respones: 100
+    max_requests: 10
+    max_respones: 10
   login_settings:
     url: http://localhost/accounts/login
     username: xyz
@@ -34,6 +34,11 @@ datasets:
   connection_uri: localhost
   database_name: github-com12
   collection_name: pages_66
+callback:
+  url: http://localhost/accounts/login
+  method: get
+  headers:
+    x-token: xyz
 context:
   author: https://github.com/rrmerugu
   description: Crawler that scrapes invanalabs xyz
