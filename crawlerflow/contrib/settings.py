@@ -22,5 +22,6 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12,
     },
     'FEED_FORMAT':  'json',
-    'FEED_URI': "data.json"
+    'FEED_URI': "data.json",
+    'USER_AGENT': "CrawlerFlow/beta (+http://crawlerflow.com/bot.html)"
 }
