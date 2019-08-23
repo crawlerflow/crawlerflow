@@ -35,9 +35,10 @@ class GenericLinkExtractor(object):
                                             allow_domains=self.allow_domains
                                             ).extract_links(response=response)
         all_links_strings = [link.url for link in all_links]
-
         filtered_links = []
         if "*" in self.allow_domains:
+            return all_links_strings
+        if self.allow_domains.__len__() == 0:
             return all_links_strings
         for domain in self.allow_domains:
             regex_domain = r"/{}".format(domain).replace(".", "\.")
