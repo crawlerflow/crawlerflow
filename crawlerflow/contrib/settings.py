@@ -1,6 +1,6 @@
 DEFAULT_SETTINGS_FOR_SCRAPY = {
     'COMPRESSION_ENABLED': True,
-    'HTTPCACHE_ENABLED': True,
+    'HTTPCACHE_ENABLED': False,
     'TELNETCONSOLE_PORT': [6023, 6073],
     'ITEM_PIPELINES': {
         'crawlerflow.contrib.pipelines.default.InvanaDataPipeline': 1,
