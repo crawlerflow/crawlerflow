@@ -1,30 +1,30 @@
-crawlerflow-stats/default_spider/responses_count: 550
-crawlerflow-stats/response-status/110: 539
+crawlerflow-stats/default_spider/responses_count: 655
+crawlerflow-stats/response-status/110: 644
 crawlerflow-stats/response-status/200: 10
 crawlerflow-stats/response-status/302: 1
 crawlerflow-stats/spiders/default_spider/requests_count: 11
-crawlerflow-stats/traversals/default_traversal/requests_count: 559
+crawlerflow-stats/traversals/default_traversal/requests_count: 664
 crawlerflow-stats/traversals/init/requests_count: 2
-downloader/exception_count: 539
-downloader/exception_type_count/builtins.TypeError: 539
-downloader/request_bytes: 7448
+downloader/exception_count: 644
+downloader/exception_type_count/builtins.TypeError: 644
+downloader/request_bytes: 7446
 downloader/request_count: 22
 downloader/request_method_count/GET: 11
-downloader/response_bytes: 276437
-downloader/response_count: 550
-downloader/response_status_count/110: 539
+downloader/response_bytes: 297037
+downloader/response_count: 655
+downloader/response_status_count/110: 644
 downloader/response_status_count/200: 10
 downloader/response_status_count/302: 1
-dupefilter/filtered: 361
+dupefilter/filtered: 421
 finish_reason: finished
-finish_time: 2019-08-23 13:04:26.130025
+finish_time: 2019-08-24 05:26:30.628914
 item_scraped_count: 10
-memusage/max: 58146816
-memusage/startup: 58146816
+memusage/max: 58241024
+memusage/startup: 58241024
 request_depth_max: 2
-response_received_count: 549
-scheduler/dequeued: 550
-scheduler/dequeued/memory: 550
-scheduler/enqueued: 550
-scheduler/enqueued/memory: 550
-start_time: 2019-08-23 13:04:21.074122
+response_received_count: 654
+scheduler/dequeued: 655
+scheduler/dequeued/memory: 655
+scheduler/enqueued: 655
+scheduler/enqueued/memory: 655
+start_time: 2019-08-24 05:26:24.942955
