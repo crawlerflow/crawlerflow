@@ -1,11 +1,8 @@
-from scrapy.spiders import CrawlSpider, Spider
-from scrapy.spiders.init import InitSpider
+from scrapy.spiders import CrawlSpider
 from crawlerflow.utils.spiders import get_spider_from_list
 from crawlerflow.core.traversals.generic import GenericLinkExtractor
 import scrapy
 from scrapy.http import Request, FormRequest
-import os
-from scrapy.utils.response import open_in_browser
 
 
 class LoginParser(object):
