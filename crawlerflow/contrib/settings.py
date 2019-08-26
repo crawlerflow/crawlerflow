@@ -1,6 +1,6 @@
 DEFAULT_SETTINGS_FOR_SCRAPY = {
-    'COMPRESSION_ENABLED': True,
-    'HTTPCACHE_ENABLED': True,
+    'COMPRESSION_ENABLED': False,
+    'HTTPCACHE_ENABLED': False,
     'TELNETCONSOLE_PORT': [6023, 6073],
     'ITEM_PIPELINES': {
         'crawlerflow.contrib.pipelines.default.InvanaDataPipeline': 1,
@@ -21,6 +21,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
         'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12,
     },
-    'FEED_FORMAT':  'json',
-    'FEED_URI': "data.json"
+    'FEED_FORMAT': 'json',
+    'FEED_URI': "data.json",
+    'LOG_ENABLED': False
 }

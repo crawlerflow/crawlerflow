@@ -88,6 +88,7 @@ class CustomContentExtractor(ExtractorBase):
             if selector.get('selector_attribute') == 'element' and len(selector.get('child_selectors', [])) > 0:
                 # TODO - currently only support multiple elements strategy. what if multiple=False
                 elements = self.response.css(selector.get('selector'))
+                print ("<<Elements", elements)
                 elements_data = []
                 for el in elements:
                     datum = {}
@@ -104,6 +105,7 @@ class CustomContentExtractor(ExtractorBase):
             else:
                 _d = get_selector_element(self.response, selector)
                 extracted_data[selector.get('selector_id')] = _d
+
         data[self.extractor_id] = extracted_data
         return data
 

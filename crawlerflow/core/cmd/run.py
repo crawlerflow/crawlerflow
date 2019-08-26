@@ -31,5 +31,5 @@ def run():
                                  settings=DEFAULT_SETTINGS_FOR_SCRAPY)
     job = job_generator.create_spider_job()
 
-    runner = CrawlerFlowJobRunner( )
+    runner = CrawlerFlowJobRunner()
     runner.start_job(job=job, path=path)

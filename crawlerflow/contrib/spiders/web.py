@@ -1,13 +1,13 @@
-from crawlerflow.contrib.spiders.base import WebCrawlerBase
+from crawlerflow.contrib.spiders.base import CrawlerFlowSpiderBase
 from importlib import import_module
 from crawlerflow.utils.url import get_domain
 
 
-class InvanaBotSingleWebCrawler(WebCrawlerBase):
+class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
     """
     This is generic spider
     """
-    name = "InvanaBotSingleWebCrawler"
+    name = "CrawlerFlowWebSpider"
 
     def closed(self, reason):
         print("spider closed with payload:", reason, self.spider_config.get('cti_id'))
@@ -35,6 +35,7 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
         return {extractor_id: None}
 
     def parse(self, response=None):
+        print("Default Parse Begin")
         spider_config = self.get_spider_config(response=response)
         """
         Use this when multiple databases concept is implemented
@@ -45,6 +46,14 @@ class InvanaBotSingleWebCrawler(WebCrawlerBase):
         )
         """
         data = {}
+
+        print(response.status)
+        if "crawlerflow" in str(response.body):
+            print("Successfully logged in. Let's start crawling!")
+            # Now the crawling can begin..
+        else:
+            print("Bad times :(")
+            # Something went wrong, we couldn't log in, so nothing happens.
 
         all_extracted_data = {}
         for extractor in spider_config.get('extractors', []):

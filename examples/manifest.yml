@@ -2,28 +2,37 @@ cti_id: github
 init_spider:
   spider_id: default_spider
   start_urls:
-    - https://github.blog
+    - https://github.com
 spiders:
 - spider_id: default_spider
   spider_type: web
   extractors:
-  - extractor_type: MetaTagExtractor
-    extractor_id: meta_tags
-  traversals:
-  - traversal_id: default_traversal
-    selector_type: css
-    selector_value: "a"
-    max_pages: 500
-    next_spider_id: default_spider
+  - extractor_type: CustomContentExtractor
+    extractor_id: repositories
+    data_selectors:
+    - selector_id: title
+      selector: ".width-fit .css-truncate-target"
+      selector_type: css
+      selector_attribute: text
+      data_type: ListStringField
+#  traversals:
+#  - traversal_id: default_traversal
+#    selector_type: css
+#    selector_value: "a"
+#    max_pages: 500
+#    next_spider_id: default_spider
   stop_criteria:
     max_requests: 100
     max_respones: 100
   login_settings:
-    url: http://localhost/accounts/login
-    username: xyz
-    password: password
-    form_identifier:
-      selector: ".login-form"
+    url: https://github.com/login
+    auth_type: cookies
+    username: xxx
+    password: xxxx
+    form_identifiers:
+      form_selector: ".auth-form form"
+      username_field: login
+      password_field: password
   spider_settings:
     allowed_domains:
     - github.com
