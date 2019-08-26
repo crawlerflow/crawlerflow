@@ -1,12 +1,15 @@
 from scrapy.spiders import CrawlSpider
-from scrapy.http import Request
 from crawlerflow.utils.spiders import get_spider_from_list
-import os
 from crawlerflow.core.traversals.generic import GenericLinkExtractor
 import scrapy
+from scrapy.http import Request, FormRequest
 
 
-class WebCrawlerBase(CrawlSpider):
+class LoginParser(object):
+    pass
+
+
+class CrawlerFlowSpiderBase(CrawlSpider):
     """
 
     TODO - document why we need this as base method.
@@ -15,7 +18,7 @@ class WebCrawlerBase(CrawlSpider):
 
     # spider_id = None  # id of the current spider
     spider_config = None  # json config of the current crawler
-    spider_data_storage = None
+    spider_data_storage = None  # TODO - we might not be using this anymore, remove with caution.
     manifest = {}
     current_request_traversal_id = None  # this will contain the config of traversal that led to this spider.
 
@@ -23,23 +26,93 @@ class WebCrawlerBase(CrawlSpider):
         pass
 
     def parse_error(self, failure):
+        print("failure", failure)
         pass
 
-    def start_requests(self):
-        for url in self.start_urls:
-            yield scrapy.Request(
+    def get_spider_meta(self):
+        return {
+            "current_request_traversal_count": 0,
+            "spider_config": self.spider_config,
+            "manifest": self.manifest,
+            "current_request_traversal_id": "init",
+            "current_traversal_max_count": 1
+        }
+
+    def get_spider_request_kwargs(self):
+
+        return {
+            "errback": self.parse_error,
+            "dont_filter": True,
+            "meta": self.get_spider_meta()
+        }
+
+    def _prepare_start_requests(self, urls=None):
+        print("Preparing start requests for urls: ", urls)
+        start_requests = []
+        for url in urls:
+            init_request_kwargs = self.get_spider_request_kwargs()
+            start_requests.append(scrapy.Request(
                 url,
                 callback=self.parse,
-                errback=self.parse_error,
-                dont_filter=True,
-                meta={
-                    "current_request_traversal_count": 0,
-                    "spider_config": self.spider_config,
-                    "manifest": self.manifest,
-                    "current_request_traversal_id": "init",
-                    "current_traversal_max_count": 1
+                **init_request_kwargs
+            ))
+        return start_requests
+
+    def _prepare_login_request(self):
+        """
+        Generate a login parser request.
+        """
+        login_settings = self.spider_config.get("login_settings", None)
+        if login_settings:
+            login_request_kwargs = {}
+            form_identifiers = login_settings.get("form_identifiers", {})
+            auth_type = login_settings.get("auth_type")
+            if auth_type == "cookies":
+                form_kwargs = {
+                    "formdata": {
+                        form_identifiers['username_field']: login_settings['username'],
+                        form_identifiers['password_field']: login_settings['password']
+                    },
+                    "formcss": form_identifiers['form_selector'],
                 }
-            )
+                login_request_kwargs.update(form_kwargs)
+            else:
+                raise NotImplementedError("only auth_type=cookies is supported currently.")
+            return login_request_kwargs
+        else:
+            return None
+
+    def login_request(self):
+        """This function is called before crawling starts."""
+        login_settings = self.spider_config.get("login_settings", {})
+        login_url = login_settings.get("url")
+        init_request_kwargs = self.get_spider_request_kwargs()
+        return Request(url=login_url, **init_request_kwargs, callback=self.login_parser, )
+
+    def login_parser(self, response):
+        login_request_kwargs = self._prepare_login_request()
+        request_kwargs = self.get_spider_request_kwargs()
+        return FormRequest.from_response(
+            response,
+            **login_request_kwargs,
+            **request_kwargs,
+            callback=self.post_login_init_parser
+        )
+
+    def post_login_init_parser(self, response):
+        start_requests = self._prepare_start_requests(self.start_urls)
+        for request in start_requests:
+            yield request
+
+    def start_requests(self):
+        login_settings = self.spider_config.get("login_settings", {})
+        login_url = login_settings.get("url")
+        if login_url:
+            yield self.login_request()
+        else:
+            start_requests = self._prepare_start_requests(self.start_urls)
+            for request in start_requests:
+                yield request
 
     def get_spider_config(self, response=None):
         if response.meta.get("spider_config"):
@@ -65,15 +138,6 @@ class WebCrawlerBase(CrawlSpider):
             "_data_storage_collection_name": collection_name,
             "_data": data
         }
-
-    def _build_request(self, rule, link):
-        headers = {}
-        user_agent_header = os.environ.get("WCP_REQUEST_HEADERS_USER_AGENT")
-        if user_agent_header:
-            headers = {"User-Agent": user_agent_header}
-        r = Request(url=link.url, headers=headers, callback=self._response_downloaded)
-        r.meta.update(rule=rule, link_text=link.text)
-        return r
 
     @staticmethod
     def is_this_request_from_same_traversal(response, traversal):
@@ -110,7 +174,8 @@ class WebCrawlerBase(CrawlSpider):
         kwargs['allow_domains'] = traversal.get("allow_domains", [])
         return GenericLinkExtractor(**kwargs).extract_links(response=response)
 
-    def get_traversal_max_pages(self, traversal=None):
+    @staticmethod
+    def get_traversal_max_pages(traversal=None):
         return traversal.get('max_pages', 1)
 
     def get_current_traversal_requests_count(self, traversal_id=None):
@@ -207,3 +272,5 @@ class WebCrawlerBase(CrawlSpider):
             print("Extracted {} traversal_links for traversal_id:'{}' in url:{}".format(len(traversal_links),
                                                                                         traversal_id, response.url))
         return traversal_data, to_traverse_links_list
+
+    # def login_request(self):

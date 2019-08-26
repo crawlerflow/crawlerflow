@@ -1,4 +1,4 @@
-from .base import WebCrawlerBase
+from .base import CrawlerFlowSpiderBase
 from crawlerflow.utils.url import get_domain, get_absolute_url
 from scrapy.utils.spider import iterate_spider_output
 from crawlerflow.utils.spiders import get_spider_from_list
@@ -6,7 +6,7 @@ import scrapy
 import json
 
 
-class GenericAPISpider(WebCrawlerBase):
+class GenericAPISpider(CrawlerFlowSpiderBase):
     """
 
     start_urls: ["https://news.ycombinator.com/rss"]

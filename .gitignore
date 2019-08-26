@@ -13,3 +13,5 @@ site/
 examples/scripts/*
 exampo/
 ___scripts/.logs/*
+examples/test_login.py
+examples/credentials.yaml
