@@ -24,6 +24,11 @@ spiders:
   stop_criteria:
     max_requests: 100
     max_respones: 100
+  browser_engine_settings:
+    host: http://0.0.0.0:5000
+    browser_type: selenium
+    token: iamlazydeveloper
+    take_screenshot: false
   login_settings:
     url: https://github.com/login
     auth_type: cookies

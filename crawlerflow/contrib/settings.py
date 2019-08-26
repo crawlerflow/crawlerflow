@@ -15,11 +15,12 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderRequestStats": 121,
         "crawlerflow.contrib.middlewares.downloaders.status.CrawlerFlowStatusStats": 800,
         "crawlerflow.contrib.middlewares.downloaders.spider_analytics.IndividualSpiderResponseStats": 801,
+        "crawlerflow.contrib.middlewares.downloaders.browser_engine.BrowsersEngineBrowserMiddleware": 802,
     },
     'EXTENSIONS': {
         'crawlerflow.contrib.extensions.timeseries.CrawlerFlowTimeSeriesStats': 10,
         'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
-        'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12,
+        'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12
     },
     'FEED_FORMAT': 'json',
     'FEED_URI': "data.json",
