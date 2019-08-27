@@ -47,13 +47,7 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         """
         data = {}
 
-        print(response.status)
-        if "crawlerflow" in str(response.body):
-            print("Successfully logged in. Let's start crawling!")
-            # Now the crawling can begin..
-        else:
-            print("Bad times :(")
-            # Something went wrong, we couldn't log in, so nothing happens.
+        # TODO - add validation to talk about the login status for login + crawler
 
         all_extracted_data = {}
         for extractor in spider_config.get('extractors', []):

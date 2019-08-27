@@ -3,7 +3,8 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     'HTTPCACHE_ENABLED': False,
     'TELNETCONSOLE_PORT': [6023, 6073],
     'ITEM_PIPELINES': {
-        'crawlerflow.contrib.pipelines.default.InvanaDataPipeline': 1,
+        'crawlerflow.contrib.pipelines.nosql.mongodb.MongoDBPipeline': 1,
+        'crawlerflow.contrib.pipelines.nosql.elasticsearch.ElasticSearchPipeline': 2,
     },
     'LOGSTATS_INTERVAL': 1,
     'DOWNLOADER_MIDDLEWARES': {

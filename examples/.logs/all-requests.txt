@@ -1,3 +1,1 @@
-https://github.com/login,200,None,None,2.469899892807007
-https://github.com/session,200,None,None,1.6123878955841064
-https://github.com,200,None,None,5.2669360637664795
+https://github.com,200,None,None,0.5213000774383545
