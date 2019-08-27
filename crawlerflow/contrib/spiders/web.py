@@ -35,7 +35,6 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         return {extractor_id: None}
 
     def parse(self, response=None):
-        print("Default Parse Begin")
         spider_config = self.get_spider_config(response=response)
         """
         Use this when multiple databases concept is implemented
@@ -47,13 +46,7 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         """
         data = {}
 
-        print(response.status)
-        if "crawlerflow" in str(response.body):
-            print("Successfully logged in. Let's start crawling!")
-            # Now the crawling can begin..
-        else:
-            print("Bad times :(")
-            # Something went wrong, we couldn't log in, so nothing happens.
+        # TODO - add validation to talk about the login status for login + crawler
 
         all_extracted_data = {}
         for extractor in spider_config.get('extractors', []):
@@ -71,10 +64,9 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         # This will save the data
         data['extracted_data'] = all_extracted_data
         data['traversal_data'] = traversal_data
-
         yield self.prepare_data_for_yield(
             data=data,
-            # storage_id=default_storage.get("storage_id"),
+            storage_id=spider_config.get("storage_id"),
             # collection_name=default_storage.get("collection_name")
         )
 

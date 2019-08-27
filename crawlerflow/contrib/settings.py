@@ -3,7 +3,11 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     'HTTPCACHE_ENABLED': False,
     'TELNETCONSOLE_PORT': [6023, 6073],
     'ITEM_PIPELINES': {
-        'crawlerflow.contrib.pipelines.default.InvanaDataPipeline': 1,
+        'crawlerflow.contrib.pipelines.others.json.JsonFileWriterPipeline': 1,
+        'crawlerflow.contrib.pipelines.others.csv.CsvFileWriterPipeline': 2,
+
+        'crawlerflow.contrib.pipelines.nosql.mongodb.MongoDBPipeline': 3,
+        'crawlerflow.contrib.pipelines.nosql.elasticsearch.ElasticSearchPipeline': 4,
     },
     'LOGSTATS_INTERVAL': 1,
     'DOWNLOADER_MIDDLEWARES': {
@@ -22,7 +26,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
         'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12
     },
-    'FEED_FORMAT': 'json',
-    'FEED_URI': "data.json",
+    # 'FEED_FORMAT': 'json',
+    # 'FEED_URI': "data.json",
     'LOG_ENABLED': False
 }

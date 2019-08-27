@@ -1,22 +1,21 @@
-crawlerflow-stats/default_spider/responses_count: 3
-crawlerflow-stats/response-status/200: 3
-crawlerflow-stats/spiders/default_spider/requests_count: 3
-crawlerflow-stats/traversals/init/requests_count: 6
-downloader/request_count: 3
-downloader/response_bytes: 119250
-downloader/response_count: 3
-downloader/response_status_count/200: 3
+crawlerflow-stats/default_spider/responses_count: 2
+crawlerflow-stats/response-status/200: 2
+crawlerflow-stats/spiders/default_spider/requests_count: 2
+crawlerflow-stats/traversals/init/requests_count: 4
+downloader/request_bytes: 410
+downloader/request_count: 4
+downloader/request_method_count/GET: 2
+downloader/response_bytes: 393458
+downloader/response_count: 2
+downloader/response_status_count/200: 2
 finish_reason: finished
-finish_time: 2019-08-26 19:36:24.394662
-item_scraped_count: 1
-log_count/DEBUG: 10
-log_count/INFO: 15
-memusage/max: 58253312
-memusage/startup: 58249216
-request_depth_max: 2
-response_received_count: 3
-scheduler/dequeued: 3
-scheduler/dequeued/memory: 3
-scheduler/enqueued: 3
-scheduler/enqueued/memory: 3
-start_time: 2019-08-26 19:36:14.644904
+finish_time: 2019-08-27 17:45:54.234487
+item_scraped_count: 2
+memusage/max: 53870592
+memusage/startup: 53866496
+response_received_count: 2
+scheduler/dequeued: 2
+scheduler/dequeued/memory: 2
+scheduler/enqueued: 2
+scheduler/enqueued/memory: 2
+start_time: 2019-08-27 17:45:52.927490

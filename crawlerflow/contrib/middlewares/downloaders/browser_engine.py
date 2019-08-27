@@ -22,7 +22,6 @@ class BrowsersEngineBrowserMiddleware(object):
     def process_request(self, request, spider):
         spider_id = spider.spider_config.get("spider_id")
         browser_engine_settings = spider.spider_config.get("browser_engine_settings")
-        print("browser_engine_settings", browser_engine_settings)
         if browser_engine_settings:
             token = browser_engine_settings.get("token")
             browser_type = browser_engine_settings.get("browser_type", "default")

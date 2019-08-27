@@ -1,16 +1,15 @@
 from twisted.internet import reactor
-from scrapy.crawler import Crawler, CrawlerRunner
+from scrapy.crawler import Crawler
 from scrapy.settings import Settings
 from crawlerflow.contrib.spiders.web import CrawlerFlowWebSpider
 from crawlerflow.contrib.spiders.xml import GenericXMLFeedSpider
 from crawlerflow.contrib.spiders.api import GenericAPISpider
 from scrapy import signals
+from crawlerflow.core.storage.default import item_scraped_callback
 import yaml
-import json
 import os
-import time
 from datetime import datetime
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 
 
 class CrawlerFlowJobRunner(object):
@@ -33,6 +32,11 @@ class CrawlerFlowJobRunner(object):
         # remove any log files
         for file in sorted(os.listdir(log_director)):
             os.remove("{}/{}".format(log_director, file))
+
+    def validate_storages(self, storages=None):
+        for storage in storages:
+            # validate
+            print(storage)
 
     def start_job(self, job=None, path=None, callback_fn=None):
         spider_type = job['spider_type']
@@ -77,8 +81,11 @@ class CrawlerFlowJobRunner(object):
             open('{}/all-requests.txt'.format(log_director), 'w').close()
 
         self.clean_directory(path=path)
-        runner = CrawlerProcess(settings=job['spider_settings'])
+        self.validate_storages(storages=job['spider_kwargs'].get("manifest", {}).get("datasets", []))
+        runner = CrawlerRunner(settings=job['spider_settings'])
         spider.signals.connect(engine_started_callback, signals.engine_started)
         spider.signals.connect(engine_stopped_callback, signals.engine_stopped)
+        # spider.signals.connect(item_scraped_callback, signals.item_scraped)
+
         runner.crawl(spider, **spider_kwargs)
         reactor.run()
