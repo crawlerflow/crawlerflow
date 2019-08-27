@@ -1,4 +1,5 @@
 class CrawlerFlowPipelineBase(object):
+    storage_type = None
 
     def __init__(self, data_storages=None):
         self.data_storage_connections = self.create_connections(data_storages=data_storages)
@@ -13,13 +14,25 @@ class CrawlerFlowPipelineBase(object):
         raise NotImplementedError()
 
     def create_connections(self, data_storages=None):
+        """
+
+
+
+        :param data_storages:
+        :return:
+        """
         data_storage_connections = {}
         for data_storage in data_storages:
             storage_type = data_storage['storage_type']
             storage_id = data_storage['storage_id']
-            if storage_type == "mongodb":
+            """
+            connection will be none for the file storage.
+            """
+
+            if storage_type == self.storage_type:
+                connection = self.create_connection(data_storage=data_storage)
                 data_storage_connections[storage_id] = {
-                    "connection": self.create_connection(data_storage=data_storage),
+                    "connection": connection,
                     "data_storage": data_storage
                 }
         return data_storage_connections
@@ -66,7 +79,6 @@ class CrawlerFlowPipelineBase(object):
         raise NotImplementedError()
 
     def process_item(self, item, spider):
-        print("=======", self.data_storage_connections.keys(), item)
         if item.get("_data_storage_id") in self.data_storage_connections.keys():
             data_storage_connection = self.get_connection_from_item(item=item)
             self.create_or_update_item(item=item, spider=spider, data_storage_connection=data_storage_connection)

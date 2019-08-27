@@ -9,6 +9,7 @@ class ElasticSearchPipeline(CrawlerFlowPipelineBase):
     Pipeline to save the data to ElasticSearch
 
     """
+    storage_type = "elasticsearch"
 
     def create_connection(self, data_storage=None):
         data_storage_settings = data_storage['settings']

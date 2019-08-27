@@ -6,10 +6,10 @@ init_spider:
 spiders:
 - spider_id: default_spider
   spider_type: web
+  storage_id: dataset4
   extractors:
   - extractor_type: CustomContentExtractor
     extractor_id: repositories
-    storage_id: default
     data_selectors:
     - selector_id: title
       selector: ".width-fit .css-truncate-target"
@@ -56,8 +56,10 @@ data_storages:
     connection_uri: localhost
     database_name: database2
     collection_name: pages_66
-- storage_id: dataset3
-  storage_type: text
+#- storage_id: dataset3
+#  storage_type: json_file
+- storage_id: dataset4
+  storage_type: csv_file
 context:
   author: https://github.com/rrmerugu
   description: Crawler that scrapes invanalabs xyz

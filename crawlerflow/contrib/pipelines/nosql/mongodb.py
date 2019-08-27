@@ -8,6 +8,7 @@ class MongoDBPipeline(CrawlerFlowPipelineBase):
     Pipeline to save the data to MongoDB
 
     """
+    storage_type = "mongodb"
 
     def create_connection(self, data_storage=None):
         data_storage_settings = data_storage['settings']

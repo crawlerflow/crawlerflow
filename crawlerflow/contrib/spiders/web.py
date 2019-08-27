@@ -35,7 +35,6 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         return {extractor_id: None}
 
     def parse(self, response=None):
-        print("Default Parse Begin")
         spider_config = self.get_spider_config(response=response)
         """
         Use this when multiple databases concept is implemented
@@ -65,10 +64,9 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         # This will save the data
         data['extracted_data'] = all_extracted_data
         data['traversal_data'] = traversal_data
-
         yield self.prepare_data_for_yield(
             data=data,
-            # storage_id=default_storage.get("storage_id"),
+            storage_id=spider_config.get("storage_id"),
             # collection_name=default_storage.get("collection_name")
         )
 
