@@ -6,7 +6,7 @@ init_spider:
 spiders:
 - spider_id: default_spider
   spider_type: web
-  storage_id: dataset4
+  storage_id: default2
   extractors:
   - extractor_type: CustomContentExtractor
     extractor_id: repositories
@@ -51,11 +51,11 @@ data_storages:
     database_name: database1
     collection_name: pages_66
 - storage_id: default2
-  storage_type: mongodb
+  storage_type: elasticsearch
   settings:
     connection_uri: localhost
-    database_name: database2
-    collection_name: pages_66
+    index_name: database33
+    doc_type: pages_66
 #- storage_id: dataset3
 #  storage_type: json_file
 - storage_id: dataset4

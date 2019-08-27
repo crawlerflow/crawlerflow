@@ -6,6 +6,12 @@ import csv, json, sys
 
 
 class CsvFileWriterPipeline(CrawlerFlowPipelineBase):
+    """
+    data_storages:
+    - storage_id: dataset3
+      storage_type: csv_file
+
+    """
     storage_type = "csv_file"
 
     def create_connection(self, data_storage=None):

@@ -7,6 +7,14 @@ class MongoDBPipeline(CrawlerFlowPipelineBase):
     """
     Pipeline to save the data to MongoDB
 
+    data_storages
+    - storage_id: default2
+      storage_type: mongodb
+      settings:
+        connection_uri: localhost
+        database_name: database2
+        collection_name: pages_66
+
     """
     storage_type = "mongodb"
 

@@ -5,17 +5,17 @@ crawlerflow-stats/traversals/init/requests_count: 4
 downloader/request_bytes: 410
 downloader/request_count: 4
 downloader/request_method_count/GET: 2
-downloader/response_bytes: 392512
+downloader/response_bytes: 393458
 downloader/response_count: 2
 downloader/response_status_count/200: 2
 finish_reason: finished
-finish_time: 2019-08-27 17:25:40.037362
-log_count/ERROR: 2
-memusage/max: 53960704
-memusage/startup: 53956608
+finish_time: 2019-08-27 17:45:54.234487
+item_scraped_count: 2
+memusage/max: 53870592
+memusage/startup: 53866496
 response_received_count: 2
 scheduler/dequeued: 2
 scheduler/dequeued/memory: 2
 scheduler/enqueued: 2
 scheduler/enqueued/memory: 2
-start_time: 2019-08-27 17:25:38.740120
+start_time: 2019-08-27 17:45:52.927490

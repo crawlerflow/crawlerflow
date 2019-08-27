@@ -4,6 +4,11 @@ from datetime import datetime
 
 
 class JsonFileWriterPipeline(CrawlerFlowPipelineBase):
+    """
+    data_storages:
+    - storage_id: dataset4
+      storage_type: json_file
+    """
     storage_type = "json_file"
 
     def create_connection(self, data_storage=None):
