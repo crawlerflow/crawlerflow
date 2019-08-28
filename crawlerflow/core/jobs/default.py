@@ -82,9 +82,7 @@ class JobGenerator(object):
         manifest, start_urls, errors = self.import_files()
         spider_config = manifest.get("spiders", [])[0]
         spider_type = self.get_spider_type(spider_data=spider_config)
-        settings_from_manifest = manifest.get("settings", {})
-        for k, v in settings_from_manifest.items():
-            self.settings[k.upper()] = v
+
         spider_kwargs = self.generate_spider_kwargs(spider_config=spider_config, start_urls=start_urls,
                                                     manifest=manifest)
         return {

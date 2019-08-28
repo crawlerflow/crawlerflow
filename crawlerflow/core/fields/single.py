@@ -24,12 +24,15 @@ class FieldTransformerBase(object):
 
     def try_or_none(self):
         transformation_method = self.get_method()
-        try:
-            result_data = transformation_method(self.data)
-        except Exception as e:
-            print(e)
-            result_data = self.data
-        return result_data
+        if transformation_method:
+            try:
+                result_data = transformation_method(self.data)
+            except Exception as e:
+                # print(e)
+                result_data = self.data
+            return result_data
+        else:
+            return self.data
 
     def transform(self):
         return self.try_or_none()
@@ -58,6 +61,7 @@ class FloatField(FieldTransformerBase):
                 return float(data[0])
             else:
                 return float(0)
+
         return custom_float
 
 

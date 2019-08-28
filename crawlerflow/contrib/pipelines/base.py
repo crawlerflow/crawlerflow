@@ -79,9 +79,10 @@ class CrawlerFlowPipelineBase(object):
         raise NotImplementedError()
 
     def process_item(self, item, spider):
-        if item.get("_data_storage_id") in self.data_storage_connections.keys():
-            data_storage_connection = self.get_connection_from_item(item=item)
-            self.create_or_update_item(item=item, spider=spider, data_storage_connection=data_storage_connection)
-            return
-        else:
-            return item
+        if item:
+            if item.get("_data_storage_id") in self.data_storage_connections.keys():
+                data_storage_connection = self.get_connection_from_item(item=item)
+                self.create_or_update_item(item=item, spider=spider, data_storage_connection=data_storage_connection)
+                return
+            else:
+                return item

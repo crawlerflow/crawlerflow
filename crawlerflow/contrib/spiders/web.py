@@ -1,7 +1,7 @@
 from crawlerflow.contrib.spiders.base import CrawlerFlowSpiderBase
 from importlib import import_module
 from crawlerflow.utils.url import get_domain
-
+from scrapy.spidermiddlewares.httperror import HttpErrorMiddleware
 
 class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
     """
@@ -71,7 +71,8 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         )
 
         # This will initiate new traversals
-        traversal_requests = self.make_traversal_requests(to_traverse_links_list=to_traverse_links_list)
+        traversal_requests = self.make_traversal_requests(to_traverse_links_list=to_traverse_links_list,
+                                                          response=response)
         for traversal_request in traversal_requests:
             yield traversal_request
         self.post_parse(response=response)

@@ -11,5 +11,5 @@ class CrawlerFlowLogStats(LogStats):
         if not os.path.exists(log_director):
             os.makedirs(log_director)
 
-        with open('{}/log.txt'.format(log_director), 'w') as yml:
+        with open('{}/stats.txt'.format(log_director), 'w') as yml:
             yaml.dump(self.stats.get_stats(), yml, allow_unicode=True)

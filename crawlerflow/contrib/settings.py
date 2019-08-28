@@ -10,9 +10,18 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.pipelines.nosql.elasticsearch.ElasticSearchPipeline': 4,
     },
     'LOGSTATS_INTERVAL': 1,
+    # 'SPIDER_MIDDLEWARES_BASE': {
+    #     # HttpError middleware this will interfere with browser engine's 110 responses, so removed.
+    #     "scrapy.spidermiddlewares.httperror.HttpError": None,
+    #     'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
+    #     'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
+    #     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
+    #     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
+    # },
     'DOWNLOADER_MIDDLEWARES': {
+        "crawlerflow.contrib.middlewares.downloaders.browser_engine_retry.BrowserEngineRetryMiddleware": 101,
         "crawlerflow.contrib.middlewares.downloaders.download_time.CrawlerFlowDownloadTime": 110,
-        "crawlerflow.contrib.middlewares.downloaders.controllers.IgnoreTraversalRequestsController": 111,
+        "crawlerflow.contrib.middlewares.downloaders.controllers.IgnoreTraversalMaxSuccessPagesController": 111,
         "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderRequestsBasedStopController": 112,
         "crawlerflow.contrib.middlewares.downloaders.controllers.SpiderResponsesBasedStopController": 113,
         "crawlerflow.contrib.middlewares.downloaders.spider_delay.IndividualSpiderDownloadDelay": 114,
@@ -26,7 +35,20 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
         'crawlerflow.contrib.extensions.logstats.CrawlerFlowLogStats': 11,
         'crawlerflow.contrib.extensions.requests.CrawlerFlowRequestsStats': 12
     },
+    # 'ROBOTSTXT_OBEY': True,
+    # 'ROBOTSTXT_ENABLED': True,
+    'CONCURRENT_REQUESTS': 1,
+    # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
     # 'FEED_FORMAT': 'json',
     # 'FEED_URI': "data.json",
-    'LOG_ENABLED': False
+    'LOG_ENABLED': True,
+    'LOG_LEVEL': "DEBUG",
+    # 'LOG_STDOUT': False,
+    'LOG_FILE': 'log.txt',
+    'RETRY_ENABLED': True,
+    'RETRY_TIMES': 10,
+    # 'LOG_ENCODING': 'utf-8',
+    # 'SCHEDULER_DEBUG': True,
+    'USER_AGENT': "CrawlerFlow/beta (+http://crawlerflow.com/bot.html)"
+
 }

@@ -18,6 +18,7 @@ class BrowsersEngineBrowserMiddleware(object):
 
 
     """
+    timeout = 180
 
     def process_request(self, request, spider):
         spider_id = spider.spider_config.get("spider_id")
@@ -32,13 +33,16 @@ class BrowsersEngineBrowserMiddleware(object):
                 request_response = requests.get("{}/render?url={}&browser_type={}&enable_screenshot={}&token={}".format(
                     browser_url,
                     url,
-                    browser_type, 1 if take_screenshot is True else 0, token))
+                    browser_type, 1 if take_screenshot is True else 0, token),
+                    verify=False,
+                    # timeout=self.timeout
+                )
+                # TODO - remove verify=False with caution
                 if request_response.status_code == 200:
                     request_response_json = request_response.json()
                     html = request_response_json['response']['html']
                     screenshot = request_response_json['response']['screenshot']
                     request.meta['screenshot'] = screenshot
-                    # print("request['meta']", request['meta'])
                     body = str.encode(html)
                     return HtmlResponse(
                         request.url,
@@ -46,5 +50,6 @@ class BrowsersEngineBrowserMiddleware(object):
                         encoding='utf-8',
                         request=request
                     )
+
                 else:
                     raise Exception("Browser Engine failed to get the data for spider: {}".format(spider_id))

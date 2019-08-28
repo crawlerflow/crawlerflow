@@ -15,3 +15,4 @@ exampo/
 ___scripts/.logs/*
 examples/test_login.py
 examples/credentials.yaml
+__examples/*

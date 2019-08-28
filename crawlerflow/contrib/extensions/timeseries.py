@@ -21,7 +21,7 @@ class CrawlerFlowTimeSeriesStats(LogStats):
         if not os.path.exists(log_director):
             os.makedirs(log_director)
 
-        timeseries_log_file = '{}/timeseries-log.txt'.format(log_director)
+        timeseries_log_file = '{}/timeseries-stats.txt'.format(log_director)
         with open(timeseries_log_file, 'a') as fh:
             line = ",".join([str(v) for k, v in datum.items()])
             fh.write("{}\n".format(line))

@@ -150,10 +150,10 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         current_request_traversal_id = response.meta.get('current_request_traversal_id', None)
         return current_request_traversal_id == traversal_id
 
-    def make_traversal_requests(self, to_traverse_links_list=None):
+    def make_traversal_requests(self, to_traverse_links_list=None, response=None):
         traversal_requests = []
         for to_traverse_link in to_traverse_links_list:
-            traversal_requests.append(scrapy.Request(
+            traversal_requests.append(response.follow(
                 to_traverse_link.get("link"),
                 callback=self.parse,
                 errback=self.parse_error,

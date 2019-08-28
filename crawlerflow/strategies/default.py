@@ -9,7 +9,17 @@ from crawlerflow.core.storage.default import item_scraped_callback
 import yaml
 import os
 from datetime import datetime
-from scrapy.crawler import CrawlerRunner
+from scrapy.crawler import CrawlerRunner, CrawlerProcess
+from scrapy.exceptions import DontCloseSpider
+
+
+def spider_idle_callback(spider):
+    print("============ SPIDER IDLE", spider)
+    raise DontCloseSpider
+
+
+def spider_closed_callback(spider, reason):
+    print("============= SPIDER CLOSED", reason)
 
 
 class CrawlerFlowJobRunner(object):
@@ -33,10 +43,10 @@ class CrawlerFlowJobRunner(object):
         for file in sorted(os.listdir(log_director)):
             os.remove("{}/{}".format(log_director, file))
 
-    def validate_storages(self, storages=None):
-        for storage in storages:
+    def validate_storages(self, data_storages=None):
+        for data_storage in data_storages:
             # validate
-            print(storage)
+            print(data_storage)
 
     def start_job(self, job=None, path=None, callback_fn=None):
         spider_type = job['spider_type']
@@ -62,13 +72,13 @@ class CrawlerFlowJobRunner(object):
             log_director = '{}/.logs'.format(path)
             if not os.path.exists(log_director):
                 os.makedirs(log_director)
-            with open('{}/log.txt'.format(log_director), 'w') as yml:
+            with open('{}/stats.txt'.format(log_director), 'w') as yml:
                 yaml.dump(spider.stats.get_stats(), yml, allow_unicode=True)
 
         def engine_started_callback():
             log_director = '{}/.logs'.format(path)
 
-            f = open('{}/timeseries-log.txt'.format(log_director), 'w')
+            f = open('{}/timeseries-stats.txt'.format(log_director), 'w')
             datum = {
                 "item_scraped_count": 0,
                 "response_received_count": 0,
@@ -81,11 +91,18 @@ class CrawlerFlowJobRunner(object):
             open('{}/all-requests.txt'.format(log_director), 'w').close()
 
         self.clean_directory(path=path)
-        self.validate_storages(storages=job['spider_kwargs'].get("manifest", {}).get("datasets", []))
-        runner = CrawlerRunner(settings=job['spider_settings'])
+        self.validate_storages(data_storages=job['spider_kwargs'].get("manifest", {}).get("data_storages", []))
+
+        # process_settings = {
+        #     "LOG_LEVEL": spider_settings.get("LOG_LEVEL", ),
+        #     "CONCURRENT_REQUESTS": spider_settings.get("CONCURRENT_REQUESTS", 1)
+        # }
+        process = CrawlerProcess()  # TODO - send only log for debug mode
         spider.signals.connect(engine_started_callback, signals.engine_started)
         spider.signals.connect(engine_stopped_callback, signals.engine_stopped)
+        # spider.signals.connect(spider_idle_callback, signals.spider_idle)
+        spider.signals.connect(spider_closed_callback, signals.spider_closed)
         # spider.signals.connect(item_scraped_callback, signals.item_scraped)
 
-        runner.crawl(spider, **spider_kwargs)
+        process.crawl(spider, **spider_kwargs)
         reactor.run()
