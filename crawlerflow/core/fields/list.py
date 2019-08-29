@@ -15,13 +15,12 @@ class ListFieldTransformerBase(object):
     def try_or_none(self):
 
         result_data_list = []
-        try:
-            result_data = self.transformer_class(data=self.data).transform()
-            result_data_list.append(result_data)
-        except Exception as e:
-            print(e)
-            result_data = self.data
-            result_data_list.append(result_data)
+        for d in self.data:
+            try:
+                result_data = self.transformer_class(data=d).transform()
+                result_data_list.append(result_data)
+            except Exception as e:
+                print(e)
         return result_data_list
 
     def transform(self):
