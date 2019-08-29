@@ -81,12 +81,9 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         ## save datasets
         for storage_id, dataset_data in datasets_dict.items():
             if dataset_data:
-                print("dataset_data", dataset_data)
-
                 yield self.prepare_data_for_yield(
                     data=dataset_data,
                     storage_id=storage_id,
-                    # collection_name=default_storage.get("collection_name")
                 )
 
         context = self.manifest.get("context")

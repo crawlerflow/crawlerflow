@@ -55,7 +55,6 @@ class CrawlerFlowPipelineBase(object):
 
         item = {
             "_data_storage_id": storage_id,
-            "_data_storage_collection_name": collection_name,
             "_data": data
         }
 

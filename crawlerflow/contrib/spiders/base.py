@@ -156,7 +156,6 @@ class CrawlerFlowSpiderBase(CrawlSpider):
     def prepare_data_for_yield(data=None, collection_name=None, storage_id="default"):
         return {
             "_data_storage_id": storage_id,
-            "_data_storage_collection_name": collection_name,
             "_data": data
         }
 
