@@ -1,6 +1,5 @@
 import json
 from .base import FileWriterPipelineBase
-from datetime import datetime
 
 
 class JsonFileWriterPipeline(FileWriterPipelineBase):
@@ -11,16 +10,16 @@ class JsonFileWriterPipeline(FileWriterPipelineBase):
     """
     storage_type = "json_file"
 
-    def create_connection(self, data_storage=None):
-        """
-        This will be
-        """
-        return open('{}.json'.format(data_storage['storage_id']), 'w')
+    def before_closing_spider(self):
+        for k, connection in self.data_storage_connections.items():
+            conn = connection['connection']
+            conn.close()
+            data_storage = connection['data_storage']
+            file_path = '{}.json'.format(data_storage['storage_id'])
+            self.delete_file_if_exist(file_path)
+            read_fh = open('{}_temp.txt'.format(data_storage['storage_id']), 'r')
 
-    def create_or_update_item(self, item=None, spider=None, data_storage_connection=None):
-        conn = data_storage_connection['connection']
-        actual_data = item['_data']
-        data = dict(actual_data)
-        data['_entry_updated_at'] = datetime.now()
-        line = json.dumps(data, default=str) + "\n"
-        conn.write(line)
+            with open(file_path, "w") as fh:
+                rows = tuple(json.loads(line.strip("\n")) for line in read_fh.readlines())
+                json.dump(rows, fh)
+            fh.close()

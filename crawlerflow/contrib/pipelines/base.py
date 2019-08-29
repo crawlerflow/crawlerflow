@@ -1,5 +1,6 @@
 class CrawlerFlowPipelineBase(object):
     storage_type = None
+    data_storage_connections = []
 
     def __init__(self, data_storages=None):
         self.data_storage_connections = self.create_connections(data_storages=data_storages)
@@ -28,7 +29,6 @@ class CrawlerFlowPipelineBase(object):
             """
             connection will be none for the file storage.
             """
-
             if storage_type == self.storage_type:
                 connection = self.create_connection(data_storage=data_storage)
                 data_storage_connections[storage_id] = {
@@ -81,7 +81,9 @@ class CrawlerFlowPipelineBase(object):
         if item:
             if item.get("_data_storage_id") in self.data_storage_connections.keys():
                 data_storage_connection = self.get_connection_from_item(item=item)
-                self.create_or_update_item(item=item, spider=spider, data_storage_connection=data_storage_connection)
+                self.create_or_update_item(item=item,
+                                           spider=spider,
+                                           data_storage_connection=data_storage_connection)
                 return
             else:
                 return item
