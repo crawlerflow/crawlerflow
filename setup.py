@@ -14,13 +14,12 @@ setup(
         exclude=("dist", "docs", "examples", "tests",)
     ),
     install_requires=[
-        'lxml==4.1.1',
-        'pymongo',
         'requests',
-        'Scrapy==1.6.0',
+        'Scrapy',
         'pyyaml',
         'python-slugify',
-        'elasticsearch'
+        'elasticsearch',
+        'pymongo'
     ],
     entry_points={
         'console_scripts': ['crawlerflow = crawlerflow.core.cmd.run:run']
