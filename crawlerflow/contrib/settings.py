@@ -3,21 +3,13 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     'HTTPCACHE_ENABLED': False,
     'TELNETCONSOLE_PORT': [6023, 6073],
     'ITEM_PIPELINES': {
-        'crawlerflow.contrib.pipelines.others.json.JsonFileWriterPipeline': 1,
-        'crawlerflow.contrib.pipelines.others.csv.CsvFileWriterPipeline': 2,
+        'crawlerflow.contrib.pipelines.files.json.JsonFileWriterPipeline': 1,
+        'crawlerflow.contrib.pipelines.files.csv.CsvFileWriterPipeline': 2,
 
         'crawlerflow.contrib.pipelines.nosql.mongodb.MongoDBPipeline': 3,
         'crawlerflow.contrib.pipelines.nosql.elasticsearch.ElasticSearchPipeline': 4,
     },
-    'LOGSTATS_INTERVAL': 1,
-    # 'SPIDER_MIDDLEWARES_BASE': {
-    #     # HttpError middleware this will interfere with browser engine's 110 responses, so removed.
-    #     "scrapy.spidermiddlewares.httperror.HttpError": None,
-    #     'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
-    #     'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
-    #     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
-    #     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
-    # },
+    'LOGSTATS_INTERVAL': 5,
     'DOWNLOADER_MIDDLEWARES': {
         "crawlerflow.contrib.middlewares.downloaders.browser_engine_retry.BrowserEngineRetryMiddleware": 101,
         "crawlerflow.contrib.middlewares.downloaders.download_time.CrawlerFlowDownloadTime": 110,
@@ -42,7 +34,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     # 'FEED_FORMAT': 'json',
     # 'FEED_URI': "data.json",
     'LOG_ENABLED': True,
-    'LOG_LEVEL': "DEBUG",
+    'LOG_LEVEL': "INFO",
     # 'LOG_STDOUT': False,
     'LOG_FILE': 'log.txt',
     'RETRY_ENABLED': True,

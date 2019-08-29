@@ -4,9 +4,9 @@ from crawlerflow.core.traversals.generic import GenericLinkExtractor
 import scrapy
 from scrapy.http import Request, FormRequest
 
+import logging
 
-class LoginParser(object):
-    pass
+logger = logging.getLogger(__name__)
 
 
 class CrawlerFlowSpiderBase(CrawlSpider):
@@ -26,7 +26,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         pass
 
     def parse_error(self, failure):
-        print("failure", failure)
+        logger.error("failure", failure)
         pass
 
     def get_spider_meta(self):
@@ -46,12 +46,17 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             "meta": self.get_spider_meta()
         }
 
-    def _prepare_start_requests(self, urls=None):
-        print("Preparing start requests for urls: ", urls)
+    def _prepare_start_requests(self, urls=None, response=None):
+        logger.info("Preparing start requests for urls: {}".format(urls))
+
         start_requests = []
         for url in urls:
             init_request_kwargs = self.get_spider_request_kwargs()
-            start_requests.append(scrapy.Request(
+            if response:
+                requestKlass = response.follow
+            else:
+                requestKlass = scrapy.Request
+            start_requests.append(requestKlass(
                 url,
                 callback=self.parse,
                 **init_request_kwargs
@@ -66,14 +71,15 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         if login_settings:
             login_request_kwargs = {}
             form_identifiers = login_settings.get("form_identifiers", {})
-            auth_type = login_settings.get("auth_type")
+            auth_type = login_settings.get("auth_type", "cookies")
             if auth_type == "cookies":
                 form_kwargs = {
                     "formdata": {
                         form_identifiers['username_field']: login_settings['username'],
                         form_identifiers['password_field']: login_settings['password']
                     },
-                    "formcss": form_identifiers['form_selector'],
+                    "formcss": form_identifiers.get('form_selector'),
+                    "formnumber": form_identifiers.get('formnumber', 0)
                 }
                 login_request_kwargs.update(form_kwargs)
             else:
@@ -87,20 +93,35 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         login_settings = self.spider_config.get("login_settings", {})
         login_url = login_settings.get("url")
         init_request_kwargs = self.get_spider_request_kwargs()
+        init_request_kwargs['meta']['is_login_request'] = True
         return Request(url=login_url, **init_request_kwargs, callback=self.login_parser, )
 
     def login_parser(self, response):
         login_request_kwargs = self._prepare_login_request()
         request_kwargs = self.get_spider_request_kwargs()
+        # del login_request_kwargs['formcss']
+        # login_request_kwargs['formid'] = "new_user"
+        login_request_kwargs['method'] = "post"
+        request_kwargs['meta'].update(
+            # {'dont_redirect': True, "handle_httpstatus_list": [302]}
+            {'is_login_request': True}
+        )
         return FormRequest.from_response(
             response,
             **login_request_kwargs,
             **request_kwargs,
-            callback=self.post_login_init_parser
+            # method="POST",
+            callback=self.post_login_init_parser,
         )
 
     def post_login_init_parser(self, response):
-        start_requests = self._prepare_start_requests(self.start_urls)
+        is_login_request = response.request.meta.get("is_login_request")
+        if is_login_request:
+            validation_string = self.spider_config.get("login_settings", {}).get("validation_string")
+            if validation_string in str(response.body):
+                logger.info("<<<< LOGIN SUCCESSFUL >>>>")
+
+        start_requests = self._prepare_start_requests(urls=self.start_urls, response=response)
         for request in start_requests:
             yield request
 
@@ -110,7 +131,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         if login_url:
             yield self.login_request()
         else:
-            start_requests = self._prepare_start_requests(self.start_urls)
+            start_requests = self._prepare_start_requests(urls=self.start_urls)
             for request in start_requests:
                 yield request
 
@@ -252,7 +273,6 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                     we are already incrementing, the last number, so using <= might make it 6 pages when 
                     max_pages is 5 
                     """
-                    # print ("=============traversal_id", traversal_id)
                     if current_request_traversal_count < max_pages:
                         to_traverse_links_list.append(
                             {
@@ -269,8 +289,9 @@ class CrawlerFlowSpiderBase(CrawlSpider):
 
                     current_request_traversal_count += 1
 
-            print("Extracted {} traversal_links for traversal_id:'{}' in url:{}".format(len(traversal_links),
-                                                                                        traversal_id, response.url))
+            logger.info("Extracted {} traversal_links for traversal_id:'{}' in url:{}".format(len(traversal_links),
+                                                                                              traversal_id,
+                                                                                              response.url))
         return traversal_data, to_traverse_links_list
 
     # def login_request(self):

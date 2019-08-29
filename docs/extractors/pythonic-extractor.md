@@ -46,7 +46,7 @@ def default_extractor_fn(response=None):
     elif url.strip("/").count("/") == 2:  # this can be improved.
         data["page_type"] = "homepage"
     else:
-        data["page_type"] = "others"
+        data["page_type"] = files
     return data
 
 ```
