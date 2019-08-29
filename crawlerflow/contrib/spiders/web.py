@@ -62,11 +62,8 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
         """
         data = {}
 
-        if "shashank" in str(response.body):
-            print("========Yaaay!", response.request.cookies)
-            logger.info("<<<< LOGIN SUCCESS >>>>")
-
-        # TODO - add validation to talk about the login status for login + crawler
+        # TODO -  May be add validation to talk about the login status for login + crawler
+        # Anyways, login status is already conveyed in post login parser
 
         all_extracted_data = {}
 
