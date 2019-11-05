@@ -42,6 +42,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     # 'LOG_ENCODING': 'utf-8',
     # 'SCHEDULER_DEBUG': True,
     'COOKIES_DEBUG': True,
-    'USER_AGENT': "CrawlerFlow/beta (+http://crawlerflow.com/bot.html)"
+    # 'USER_AGENT': "CrawlerFlow/beta (+http://crawlerflow.com/bot.html)"
+    'USER_AGENT': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36"
 
 }

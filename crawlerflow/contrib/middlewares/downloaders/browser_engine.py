@@ -30,7 +30,8 @@ class BrowsersEngineBrowserMiddleware(object):
     """
     timeout = 180
 
-    def get_headers_from_response(self, response):
+    @staticmethod
+    def get_headers_from_response(response):
         cookies = response['cookies']
         cookies_dict = {}
         headers = {}
@@ -53,13 +54,14 @@ class BrowsersEngineBrowserMiddleware(object):
                 "value": _[1]
             })
 
-        all_headers['cookies'] = cookies
+        all_headers['Cookies'] = cookies
         # init_request_kwargs['cookies'] = cookies
         return all_headers
 
     def process_request(self, request, spider):
         spider_id = spider.spider_config.get("spider_id")
         browser_engine_settings = spider.spider_config.get("browser_engine_settings")
+        form_settings = spider.spider_config.get("login_settings", {}).get("form_settings")
         use_browser = spider.spider_config.get("login_settings", {}) \
             .get("use_browser", True if browser_engine_settings else False)
         """
@@ -80,13 +82,17 @@ class BrowsersEngineBrowserMiddleware(object):
             browser_type = browser_engine_settings.get("browser_type", "default")
             browser_url = browser_engine_settings.get("browser_engine_host", "http://0.0.0.0:5000")
             take_screenshot = browser_engine_settings.get("take_screenshot", False)
-
             all_headers = self.get_headers_from_post_data(request)
+
             print("request_headers", all_headers)
             # print ("======", request.headers)
             if browser_type != "default":
                 url = urllib.parse.quote(request.url)
 
+                payload = {"headers": all_headers}
+
+                if is_login_request:
+                    payload['form_data'] = form_settings
                 try:
                     request_response = requests.post(
                         "{}/execute?url={}&enable_screenshot={}&token={}".format(
@@ -95,7 +101,7 @@ class BrowsersEngineBrowserMiddleware(object):
                             1 if take_screenshot is True else 0,
                             token
                         ),
-                        json={"headers": all_headers},
+                        json=payload,
                         headers={"Content-Type": "application/json"},
                         verify=False,
                         timeout=self.timeout
@@ -108,16 +114,16 @@ class BrowsersEngineBrowserMiddleware(object):
                         request.meta['screenshot'] = screenshot
                         body = str.encode(html)
                         headers = self.get_headers_from_response(request_response_json['response'])
-                        # print("response headers", headers)
                         request.cookies = request_response_json['response']['cookies']
                         print("post response headers", headers)
+                        print("request.cookies", request.cookies)
                         return HtmlResponse(
                             request.url,
                             body=body,
                             encoding='utf-8',
                             request=request,
-                            # headers=request.headers,
-                            headers=headers
+                            headers=headers,
+                            # headers=headers
                             # headers={
                             # "Cookies": request_response_json['response']['cookies'],
                             # }

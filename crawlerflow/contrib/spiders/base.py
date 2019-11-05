@@ -3,7 +3,7 @@ from crawlerflow.utils.spiders import get_spider_from_list
 from crawlerflow.core.traversals.generic import GenericLinkExtractor
 import scrapy
 from scrapy.http import Request, FormRequest
-
+from crawlerflow.utils.other import convert_dict_to_scrapy_headers
 import logging
 
 logger = logging.getLogger(__name__)
@@ -46,6 +46,25 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             "meta": self.get_spider_meta()
         }
 
+    @staticmethod
+    def get_headers_from_response_data(response):
+        all_headers = {}
+
+        headers = response.headers
+        # print("headersheadersheaders", type(headers), headers)
+        cookies_temp = [cookie.decode().split(";")[0] for cookie in headers.getlist("Set-Cookie")]
+        cookies = []
+        for cookie in cookies_temp:
+            _ = cookie.split("=")
+            cookies.append({
+                "name": _[0],
+                "value": _[1]
+            })
+
+        all_headers['Cookies'] = cookies
+        # init_request_kwargs['cookies'] = cookies
+        return all_headers
+
     def _prepare_start_requests(self, urls=None, response=None):
         logger.info("Preparing start requests for urls: {}".format(urls))
 
@@ -61,7 +80,12 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         # print("cookies", cookies.keys())
         # print(response.get_cookies())
         init_request_kwargs = self.get_spider_request_kwargs()
+        if response:
+            all_headers = self.get_headers_from_response_data(response)
+        else:
+            all_headers = {"Cookies": []}
 
+        print("all_headers", all_headers)
         for url in urls:
 
             if response:
@@ -73,11 +97,38 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                 url,
                 callback=self.parse,
                 # headers={'Cookie': cookie},
-                headers=response.headers if response else {},
+                # headers=convert_dict_to_scrapy_headers(all_headers),
+                headers=response.headers,
                 # cookies=cookies,
                 **init_request_kwargs
             ))
         return start_requests
+
+    #
+    # def _prepare_login_request(self):
+    #     """
+    #     Generate a login parser request.
+    #     """
+    #     login_settings = self.spider_config.get("login_settings", None)
+    #     if login_settings:
+    #         login_request_kwargs = {}
+    #         form_identifiers = login_settings.get("form_identifiers", {})
+    #         auth_type = login_settings.get("auth_type", "cookies")
+    #         if auth_type == "cookies":
+    #             form_kwargs = {
+    #                 "formdata": {
+    #                     form_identifiers['username_field']: login_settings['username'],
+    #                     form_identifiers['password_field']: login_settings['password']
+    #                 },
+    #                 "formcss": form_identifiers['form_selector'],
+    #                 "formnumber": form_identifiers.get('formnumber', 0)
+    #             }
+    #             login_request_kwargs.update(form_kwargs)
+    #         else:
+    #             raise NotImplementedError("only auth_type=cookies is supported currently.")
+    #         return login_request_kwargs
+    #     else:
+    #         return None
 
     def _prepare_login_request(self):
         """
@@ -86,6 +137,8 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         login_settings = self.spider_config.get("login_settings", None)
         if login_settings:
             login_request_kwargs = {}
+            form_settings = login_settings.get("form_settings", {})
+
             form_identifiers = login_settings.get("form_identifiers", {})
             auth_type = login_settings.get("auth_type", "cookies")
             if auth_type == "cookies":
@@ -94,7 +147,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                         form_identifiers['username_field']: login_settings['username'],
                         form_identifiers['password_field']: login_settings['password']
                     },
-                    "formcss": form_identifiers.get('form_selector'),
+                    "formcss": form_identifiers['form_selector'],
                     "formnumber": form_identifiers.get('formnumber', 0)
                 }
                 login_request_kwargs.update(form_kwargs)
@@ -110,36 +163,40 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         login_url = login_settings.get("url")
         init_request_kwargs = self.get_spider_request_kwargs()
         init_request_kwargs['meta']['is_login_request'] = True
-        return Request(url=login_url, **init_request_kwargs, callback=self.login_parser, )
+        # return Request(url=login_url, **init_request_kwargs, callback=self.login_parser, )
+        return Request(url=login_url, **init_request_kwargs, callback=self.post_login_init_parser, )
 
-    def login_parser(self, response):
-        login_request_kwargs = self._prepare_login_request()
-        request_kwargs = self.get_spider_request_kwargs()
-        # del login_request_kwargs['formcss']
-        # login_request_kwargs['formid'] = "new_user"
-        login_request_kwargs['method'] = "post"
-        request_kwargs['meta'].update(
-            {'dont_redirect': True, "handle_httpstatus_list": [302], 'is_login_request': True}
-            # {'is_login_request': True}
-        )
-        return FormRequest.from_response(
-            response,
-            **login_request_kwargs,
-            **request_kwargs,
-            # method="POST",
-            callback=self.post_login_init_parser,
-        )
+    # def login_parser(self, response):
+    #     login_request_kwargs = self._prepare_login_request()
+    #     request_kwargs = self.get_spider_request_kwargs()
+    #     # del login_request_kwargs['formcss']
+    #     # login_request_kwargs['formid'] = "new_user"
+    #     login_request_kwargs['method'] = "post"
+    #     request_kwargs['meta'].update(
+    #         {'dont_redirect': True, "handle_httpstatus_list": [302], 'is_login_request': True}
+    #         # {'is_login_request': True}
+    #     )
+    #     return FormRequest.from_response(
+    #         response,
+    #         **login_request_kwargs,
+    #         **request_kwargs,
+    #         # method="POST",
+    #         callback=self.post_login_init_parser,
+    #     )
 
     def post_login_init_parser(self, response):
         is_login_request = response.request.meta.get("is_login_request")
         if is_login_request:
             validation_string = self.spider_config.get("login_settings", {}).get("validation_string")
+            logger.debug("====response status {}".format(response.status))
+            logger.debug("====response body {}".format(response.body))
             if validation_string in str(response.body or ''):
                 logger.info("<<<< LOGIN SUCCESSFUL >>>>")
             else:
                 logger.info("<<<< LOGIN FAILED >>>>>")
 
         start_requests = self._prepare_start_requests(urls=self.start_urls, response=response)
+        print("start_requests", start_requests)
         for request in start_requests:
             yield request
 
@@ -190,6 +247,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
 
     def make_traversal_requests(self, to_traverse_links_list=None, response=None):
         traversal_requests = []
+        print("=======response.headersresponse.headersresponse.headers===", response.headers)
         for to_traverse_link in to_traverse_links_list:
             traversal_requests.append(response.follow(
                 to_traverse_link.get("link"),
