@@ -44,9 +44,10 @@ class CrawlerFlowJobRunner(object):
             os.remove("{}/{}".format(log_director, file))
 
     def validate_storages(self, data_storages=None):
-        for data_storage in data_storages:
-            # validate
-            print(data_storage)
+        pass
+        # for data_storage in data_storages:
+        #     # validate
+        #     print(data_storage)
 
     def start_job(self, job=None, path=None, callback_fn=None):
         spider_type = job['spider_type']

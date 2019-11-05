@@ -40,7 +40,8 @@ class BrowsersEngineBrowserMiddleware(object):
         headers['Cookies'] = cookies_dict
         return headers
 
-    def get_headers_from_post_data(self, request):
+    @staticmethod
+    def get_headers_from_post_data(request):
         all_headers = {}
         headers = request.headers
         cookies_temp = [cookie.decode().split(";")[0] for cookie in headers.getlist("Set-Cookie")]
@@ -88,7 +89,7 @@ class BrowsersEngineBrowserMiddleware(object):
 
                 try:
                     request_response = requests.post(
-                        "{}/render?url={}&enable_screenshot={}&token={}".format(
+                        "{}/execute?url={}&enable_screenshot={}&token={}".format(
                             browser_url,
                             url,
                             1 if take_screenshot is True else 0,
@@ -107,14 +108,16 @@ class BrowsersEngineBrowserMiddleware(object):
                         request.meta['screenshot'] = screenshot
                         body = str.encode(html)
                         headers = self.get_headers_from_response(request_response_json['response'])
-                        print("response headers", headers)
+                        # print("response headers", headers)
                         request.cookies = request_response_json['response']['cookies']
+                        print("post response headers", headers)
                         return HtmlResponse(
                             request.url,
                             body=body,
                             encoding='utf-8',
                             request=request,
-                            headers=request.headers
+                            # headers=request.headers,
+                            headers=headers
                             # headers={
                             # "Cookies": request_response_json['response']['cookies'],
                             # }

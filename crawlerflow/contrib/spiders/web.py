@@ -33,7 +33,7 @@ class CrawlerFlowWebSpider(CrawlerFlowSpiderBase):
                 data = extractor_object.run()
                 return data
             except Exception as e:
-                logger.error("Failed to run the extractor_id {} on url {} with error:".format(extractor_id,
+                logger.error("Failed to run the extractor_id:{} on url {} with error:".format(extractor_id,
                                                                                               response.url,
                                                                                               e))
         return {extractor_id: None}

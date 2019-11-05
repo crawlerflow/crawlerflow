@@ -108,11 +108,11 @@ class GenericAPISpider(CrawlerFlowSpiderBase):
 
             traversal_links = []
             is_this_request_from_same_traversal = self.is_this_request_from_same_traversal(response, traversal)
-            print("is_this_request_from_same_traversal", is_this_request_from_same_traversal)
-            print("current_request_traversal_page_count", current_request_traversal_page_count)
-            print("traversal_max_pages", traversal_max_pages)
-            print(" current_request_traversal_page_count <= traversal_max_pages",
-                  current_request_traversal_page_count <= traversal_max_pages)
+            # print("is_this_request_from_same_traversal", is_this_request_from_same_traversal)
+            # print("current_request_traversal_page_count", current_request_traversal_page_count)
+            # print("traversal_max_pages", traversal_max_pages)
+            # print(" current_request_traversal_page_count <= traversal_max_pages",
+            #       current_request_traversal_page_count <= traversal_max_pages)
             shall_traverse = False
 
             if current_request_traversal_id is None:
@@ -140,17 +140,17 @@ class GenericAPISpider(CrawlerFlowSpiderBase):
                 spiders.
                 """
                 shall_traverse = True
-            print("shall_traverse: {}".format(traversal_id), shall_traverse)
+            # print("shall_traverse: {}".format(traversal_id), shall_traverse)
             if shall_traverse:
                 current_url = response.url
                 clean_url_without_iter_param = current_url.split("?")[0] if "?" in current_url else current_url
                 # this is already iterating, so ignore.
-                print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", clean_url_without_iter_param)
-                print("clean_url_without_iter_param", clean_url_without_iter_param)
+                # print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", clean_url_without_iter_param)
+                # print("clean_url_without_iter_param", clean_url_without_iter_param)
                 traversal_link = "{}?{}={}".format(clean_url_without_iter_param, iter_param,
                                                    current_request_traversal_page_count + 1)
 
-                print("traversal_link", traversal_link)
+                # print("traversal_link", traversal_link)
 
                 data[traversal_id] = {"traversal_urls": [traversal_link]}
                 """
@@ -166,8 +166,8 @@ class GenericAPISpider(CrawlerFlowSpiderBase):
                 max_pages is 5 
                 """
                 if current_request_traversal_page_count <= max_pages:
-                    print("=======current_request_traversal_page_count", current_request_traversal_page_count)
-                    print("-----------------------------------")
+                    # print("=======current_request_traversal_page_count", current_request_traversal_page_count)
+                    # print("-----------------------------------")
                     yield scrapy.Request(
                         traversal_link,
                         callback=self.parse,
@@ -181,9 +181,9 @@ class GenericAPISpider(CrawlerFlowSpiderBase):
                         }
                     )
 
-            print("=================================================")
-            print("====traversal_links", traversal_id, len(traversal_links), traversal_links)
-            print("=================================================")
+            # print("=================================================")
+            # print("====traversal_links", traversal_id, len(traversal_links), traversal_links)
+            # print("=================================================")
 
         yield data
 

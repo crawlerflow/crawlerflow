@@ -73,7 +73,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                 url,
                 callback=self.parse,
                 # headers={'Cookie': cookie},
-                headers=response.headers,
+                headers=response.headers if response else {},
                 # cookies=cookies,
                 **init_request_kwargs
             ))
@@ -134,8 +134,10 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         is_login_request = response.request.meta.get("is_login_request")
         if is_login_request:
             validation_string = self.spider_config.get("login_settings", {}).get("validation_string")
-            if validation_string in str(response.body):
+            if validation_string in str(response.body or ''):
                 logger.info("<<<< LOGIN SUCCESSFUL >>>>")
+            else:
+                logger.info("<<<< LOGIN FAILED >>>>>")
 
         start_requests = self._prepare_start_requests(urls=self.start_urls, response=response)
         for request in start_requests:
