@@ -41,6 +41,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     'RETRY_TIMES': 10,
     # 'LOG_ENCODING': 'utf-8',
     # 'SCHEDULER_DEBUG': True,
+    'COOKIES_DEBUG': True,
     'USER_AGENT': "CrawlerFlow/beta (+http://crawlerflow.com/bot.html)"
 
 }

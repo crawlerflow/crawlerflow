@@ -46,7 +46,6 @@ def clean_data(elements=None, selector=None):
     data_extractor = SelectorExtractor()
     if multiple is True:
         extracted_data = data_extractor.get_list_data(elements=elements)
-        print("===-=--=-=--= list", extracted_data)
     else:
         extracted_data = data_extractor.get_single_data(elements=elements)
     data = transform_data(data=extracted_data, data_type=data_type)

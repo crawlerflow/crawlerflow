@@ -16,15 +16,15 @@ spiders:
       selector_type: css
       selector_attribute: text
       data_type: ListStringField
-#  traversals:
-#  - traversal_id: default_traversal
-#    selector_type: css
-#    selector_value: "a"
-#    max_pages: 500
-#    next_spider_id: default_spider
+  traversals:
+  - traversal_id: default_traversal
+    selector_type: css
+    selector_value: "a"
+    max_pages: 4000
+    next_spider_id: default_spider
   stop_criteria:
-    max_requests: 100
-    max_respones: 100
+    max_requests: 100000
+    max_respones: 100000
 #  browser_engine_settings:
 #    host: http://0.0.0.0:5000
 #    browser_type: selenium

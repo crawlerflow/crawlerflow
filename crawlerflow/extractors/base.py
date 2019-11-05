@@ -1,3 +1,4 @@
+from scrapy.selector import Selector
 class ExtractorBase(object):
     """
 

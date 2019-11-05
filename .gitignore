@@ -16,3 +16,7 @@ ___scripts/.logs/*
 examples/test_login.py
 examples/credentials.yaml
 __examples/*
+__marketplace/*
+*.logs*
+**/.logs*
+*_temp.txt

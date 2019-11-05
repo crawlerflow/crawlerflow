@@ -1,2 +1,2 @@
-https://github.com,200,None,None,0.41434597969055176
-https://stackoverflow.com/questions/1871524/how-can-i-convert-json-to-csv,200,None,None,0.7874138355255127
+https://github.com,200,None,None,0.4799370765686035
+https://stackoverflow.com/questions/1871524/how-can-i-convert-json-to-csv,200,None,None,1.1465108394622803

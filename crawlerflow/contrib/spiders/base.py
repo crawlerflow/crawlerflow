@@ -26,7 +26,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         pass
 
     def parse_error(self, failure):
-        logger.error("failure", failure)
+        logger.error("failure : {}".format(failure))
         pass
 
     def get_spider_meta(self):
@@ -50,15 +50,31 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         logger.info("Preparing start requests for urls: {}".format(urls))
 
         start_requests = []
+        # headers = response.headers
+        # print("headers", headers.getlist('Set-Cookie'))
+        # cookies = {}
+        # for cookie in response.headers.getlist('Set-Cookie'):
+        #     single_cookie = str(cookie).split(';')[0].split("=")
+        #     cookies[str(single_cookie[0]).lstrip("b'")] = single_cookie[1]
+        # cookies['logged'] = True
+        # print("cookies", cookies)
+        # print("cookies", cookies.keys())
+        # print(response.get_cookies())
+        init_request_kwargs = self.get_spider_request_kwargs()
+
         for url in urls:
-            init_request_kwargs = self.get_spider_request_kwargs()
+
             if response:
                 requestKlass = response.follow
             else:
                 requestKlass = scrapy.Request
+
             start_requests.append(requestKlass(
                 url,
                 callback=self.parse,
+                # headers={'Cookie': cookie},
+                headers=response.headers,
+                # cookies=cookies,
                 **init_request_kwargs
             ))
         return start_requests
@@ -103,8 +119,8 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         # login_request_kwargs['formid'] = "new_user"
         login_request_kwargs['method'] = "post"
         request_kwargs['meta'].update(
-            # {'dont_redirect': True, "handle_httpstatus_list": [302]}
-            {'is_login_request': True}
+            {'dont_redirect': True, "handle_httpstatus_list": [302], 'is_login_request': True}
+            # {'is_login_request': True}
         )
         return FormRequest.from_response(
             response,
@@ -177,6 +193,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                 to_traverse_link.get("link"),
                 callback=self.parse,
                 errback=self.parse_error,
+                headers=response.headers,
                 meta=to_traverse_link.get("meta", {})
             ))
         return traversal_requests
