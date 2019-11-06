@@ -277,6 +277,7 @@ class CrawlerFlowSpiderBase(CrawlSpider):
                 to_traverse_link.get("link"),
                 callback=self.parse,
                 errback=self.parse_error,
+                cookies=response.request.cookies,
                 headers=response.headers,
                 meta=to_traverse_link.get("meta", {})
             ))
