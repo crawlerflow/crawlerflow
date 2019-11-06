@@ -46,8 +46,10 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             "meta": self.get_spider_meta()
         }
 
+    """
     @staticmethod
     def get_headers_from_response_data(response):
+        # works for scrapy response headers.
         all_headers = {}
 
         headers = response.headers
@@ -62,7 +64,26 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             })
 
         all_headers['Cookies'] = cookies
-        # init_request_kwargs['cookies'] = cookies
+        return all_headers    
+    """
+
+    @staticmethod
+    def get_headers_from_response_data(response):
+        all_headers = {}
+
+        headers = response.headers
+        print("<<<<<<<<headers", headers)
+        # print("headersheadersheaders", type(headers), headers)
+        cookies_temp = [cookie.decode().split(";")[0] for cookie in headers.getlist("Set-Cookie")]
+        cookies = []
+        for cookie in cookies_temp:
+            _ = cookie.split("=")
+            cookies.append({
+                "name": _[0],
+                "value": _[1]
+            })
+
+        all_headers['cookies'] = cookies
         return all_headers
 
     def _prepare_start_requests(self, urls=None, response=None):
@@ -81,13 +102,13 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         # print(response.get_cookies())
         init_request_kwargs = self.get_spider_request_kwargs()
         if response:
-            all_headers = self.get_headers_from_response_data(response)
+            # all_headers = self.get_headers_from_response_data(response)
+            all_headers = {"cookies": response.request.cookies}
         else:
-            all_headers = {"Cookies": []}
+            all_headers = {"cookies": []}
 
-        print("all_headers", all_headers)
+        logger.debug("all_headers {} {}".format(type(all_headers), all_headers))
         for url in urls:
-
             if response:
                 requestKlass = response.follow
             else:
@@ -96,9 +117,11 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             start_requests.append(requestKlass(
                 url,
                 callback=self.parse,
+                cookies=response.request.cookies,
                 # headers={'Cookie': cookie},
                 # headers=convert_dict_to_scrapy_headers(all_headers),
-                headers=response.headers,
+                # headers=all_headers,
+                # headers=response.headers,
                 # cookies=cookies,
                 **init_request_kwargs
             ))
@@ -163,6 +186,8 @@ class CrawlerFlowSpiderBase(CrawlSpider):
         login_url = login_settings.get("url")
         init_request_kwargs = self.get_spider_request_kwargs()
         init_request_kwargs['meta']['is_login_request'] = True
+        # init_request_kwargs['meta']['dont_redirect'] = True
+        # init_request_kwargs['meta']['handle_httpstatus_list'] = [302, ]
         # return Request(url=login_url, **init_request_kwargs, callback=self.login_parser, )
         return Request(url=login_url, **init_request_kwargs, callback=self.post_login_init_parser, )
 
@@ -191,12 +216,12 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             logger.debug("====response status {}".format(response.status))
             logger.debug("====response body {}".format(response.body))
             if validation_string in str(response.body or ''):
-                logger.info("<<<< LOGIN SUCCESSFUL >>>>")
+                logger.info("<<<< LOGIN SUCCESSFUL >>>> with headers {}".format(response.headers))
             else:
                 logger.info("<<<< LOGIN FAILED >>>>>")
 
         start_requests = self._prepare_start_requests(urls=self.start_urls, response=response)
-        print("start_requests", start_requests)
+        logger.debug("start_requests ::{}".format(start_requests))
         for request in start_requests:
             yield request
 
@@ -247,7 +272,6 @@ class CrawlerFlowSpiderBase(CrawlSpider):
 
     def make_traversal_requests(self, to_traverse_links_list=None, response=None):
         traversal_requests = []
-        print("=======response.headersresponse.headersresponse.headers===", response.headers)
         for to_traverse_link in to_traverse_links_list:
             traversal_requests.append(response.follow(
                 to_traverse_link.get("link"),

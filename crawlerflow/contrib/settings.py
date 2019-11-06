@@ -38,7 +38,7 @@ DEFAULT_SETTINGS_FOR_SCRAPY = {
     # 'LOG_STDOUT': False,
     'LOG_FILE': 'log.txt',
     'RETRY_ENABLED': True,
-    'RETRY_TIMES': 10,
+    'RETRY_TIMES': 2,
     # 'LOG_ENCODING': 'utf-8',
     # 'SCHEDULER_DEBUG': True,
     'COOKIES_DEBUG': True,

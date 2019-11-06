@@ -1,6 +1,7 @@
 from scrapy.http import HtmlResponse
 import urllib.parse
 import requests
+from crawlerflow.utils.other import convert_dict_to_scrapy_headers
 
 
 class BrowsersEngineBrowserMiddleware(object):
@@ -28,34 +29,31 @@ class BrowsersEngineBrowserMiddleware(object):
         use_browser: false
 
     """
-    timeout = 180
+    timeout = 240
 
     @staticmethod
     def get_headers_from_response(response):
         cookies = response['cookies']
-        cookies_dict = {}
+        cookies_list = []
         headers = {}
         if cookies is not None:
             for cookie in cookies:
-                cookies_dict[cookie['name']] = cookie['value']
-        headers['Cookies'] = cookies_dict
+                cookies_list.append(cookie)
+                # cookies_list.append({"name": cookie['name'], "value": cookie['value']})
+
+        headers['Cookies'] = cookies_list
+
+        # cookies_dict = {}
+        # headers = {}
+        # if cookies is not None:
+        #     for cookie in cookies:
+        #         cookies_dict[cookie['name']] = cookie['value']
+        # headers['Cookies'] = cookies_dict
         return headers
 
     @staticmethod
-    def get_headers_from_post_data(request):
-        all_headers = {}
-        headers = request.headers
-        cookies_temp = [cookie.decode().split(";")[0] for cookie in headers.getlist("Set-Cookie")]
-        cookies = []
-        for cookie in cookies_temp:
-            _ = cookie.split("=")
-            cookies.append({
-                "name": _[0],
-                "value": _[1]
-            })
-
-        all_headers['Cookies'] = cookies
-        # init_request_kwargs['cookies'] = cookies
+    def get_cookies_from_request(request):
+        all_headers = {'cookies': request.cookies}
         return all_headers
 
     def process_request(self, request, spider):
@@ -82,15 +80,13 @@ class BrowsersEngineBrowserMiddleware(object):
             browser_type = browser_engine_settings.get("browser_type", "default")
             browser_url = browser_engine_settings.get("browser_engine_host", "http://0.0.0.0:5000")
             take_screenshot = browser_engine_settings.get("take_screenshot", False)
-            all_headers = self.get_headers_from_post_data(request)
+            all_headers = self.get_cookies_from_request(request)
 
-            print("request_headers", all_headers)
             # print ("======", request.headers)
             if browser_type != "default":
                 url = urllib.parse.quote(request.url)
-
+                print("request_headers in browser_engine", url, all_headers)
                 payload = {"headers": all_headers}
-
                 if is_login_request:
                     payload['form_data'] = form_settings
                 try:
@@ -114,19 +110,19 @@ class BrowsersEngineBrowserMiddleware(object):
                         request.meta['screenshot'] = screenshot
                         body = str.encode(html)
                         headers = self.get_headers_from_response(request_response_json['response'])
-                        request.cookies = request_response_json['response']['cookies']
-                        print("post response headers", headers)
-                        print("request.cookies", request.cookies)
-                        return HtmlResponse(
-                            request.url,
-                            body=body,
-                            encoding='utf-8',
-                            request=request,
-                            headers=headers,
-                            # headers=headers
-                            # headers={
-                            # "Cookies": request_response_json['response']['cookies'],
-                            # }
-                        )
+                        request.cookies = headers["Cookies"]
+                        try:
+                            return HtmlResponse(
+                                request.url,
+                                body=body,
+                                encoding='utf-8',
+                                request=request,
+                                # cookies=headers['Cookies'],
+                                # headers=request_response.headers,
+                                # headers=headers
+                                # headers=convert_dict_to_scrapy_headers(headers)
+                            )
+                        except Exception as e:
+                            print("=============", e)
                 except Exception as e:
                     raise Exception("Browser Engine failed to get the data for spider: {}".format(spider_id))
