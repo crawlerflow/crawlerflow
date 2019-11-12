@@ -59,9 +59,12 @@ class BrowsersEngineBrowserMiddleware(object):
     def process_request(self, request, spider):
         spider_id = spider.spider_config.get("spider_id")
         browser_engine_settings = spider.spider_config.get("browser_engine_settings")
+        simulation_code = browser_engine_settings.get("extra_settings", {}).get("simulation_code")
+
         form_settings = spider.spider_config.get("login_settings", {}).get("form_settings")
         use_browser = spider.spider_config.get("login_settings", {}) \
             .get("use_browser", True if browser_engine_settings else False)
+
         """
         
         This will ignore browser engine request if use_browser=False
@@ -89,6 +92,8 @@ class BrowsersEngineBrowserMiddleware(object):
                 payload = {"headers": all_headers}
                 if is_login_request:
                     payload['form_data'] = form_settings
+                if simulation_code:
+                    payload["simulation_code"] = simulation_code
                 try:
                     request_response = requests.post(
                         "{}/execute?url={}&enable_screenshot={}&token={}".format(

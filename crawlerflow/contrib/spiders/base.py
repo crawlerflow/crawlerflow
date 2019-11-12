@@ -114,10 +114,12 @@ class CrawlerFlowSpiderBase(CrawlSpider):
             else:
                 requestKlass = scrapy.Request
 
+            if response:
+                init_request_kwargs["cookies"] = response.request.cookies
             start_requests.append(requestKlass(
                 url,
                 callback=self.parse,
-                cookies=response.request.cookies,
+
                 # headers={'Cookie': cookie},
                 # headers=convert_dict_to_scrapy_headers(all_headers),
                 # headers=all_headers,
