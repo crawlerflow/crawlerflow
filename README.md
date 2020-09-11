@@ -33,7 +33,7 @@ configurations.
 
 ```bash
 pip install git+https://github.com/crawlerflow/crawlerflow#egg=crawlerflow
-# This project is under constant development and might brake any previous implementation.
+# This project is under constant development and might break any previous implementation.
 ```
 
 
