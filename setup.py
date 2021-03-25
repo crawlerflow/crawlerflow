@@ -18,7 +18,7 @@ setup(
         'pymongo==3.7.2',
         'requests==2.21.0',
         'Scrapy==1.6.0',
-        'pyyaml==5.1',
+        'pyyaml==5.4',
         'python-slugify',
         'elasticsearch'
     ],
